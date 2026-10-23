@@ -99,11 +99,12 @@
     const r = resultado();
     $('titulo').textContent = `Líder de Ginásio - ${nomeMes(mesSel)}`;
     $('subtitulo').textContent = `${plural(r.eventos.length, 'semanal contabilizado', 'semanais contabilizados')}`;
-    document.querySelectorAll('.btn-mes').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mes === mesSel)));
+    $('mes').value = mesSel;
 
     renderPodio(r.tabela.slice(0, 3));
     renderResto(r.tabela.slice(3));
     $('vazio').hidden = r.tabela.length > 0;
+    $('baixar').disabled = r.tabela.length === 0;
 
     const ul = $('lista-semanais'); ul.replaceChildren();
     r.eventos.forEach((e) => {
@@ -168,24 +169,26 @@
     g.restore();
   }
 
+  const CARD_H = 188, K1 = 1.1;
+
   function desenharCard(g, l, lugar, x, yBase, cw) {
-    const k = lugar === 1 ? 1.14 : 1, ch = 250 * k, y = yBase - ch;
+    const k = lugar === 1 ? K1 : 1, ch = CARD_H * k, y = yBase - ch;
     const [c1, c2] = GRAD[lugar];
     g.save();
     g.translate(x, y); g.scale(k, k);
-    const w = cw / k, h = 250;
-    if (lugar === 1) { g.shadowColor = 'rgba(239,212,86,.28)'; g.shadowBlur = 36; }
-    caixa(g, 0, 0, w, h, 24); g.fillStyle = COR.preto; g.fill();
+    const w = cw / k, h = CARD_H;
+    if (lugar === 1) { g.shadowColor = 'rgba(239,212,86,.28)'; g.shadowBlur = 30; }
+    caixa(g, 0, 0, w, h, 22); g.fillStyle = COR.preto; g.fill();
     g.shadowBlur = 0; g.shadowColor = 'transparent';
-    caixa(g, 1.5, 1.5, w - 3, h - 3, 23); g.lineWidth = 3; g.strokeStyle = degrade(g, 0, 0, w, h, [c1, c2]); g.stroke();
+    caixa(g, 1.5, 1.5, w - 3, h - 3, 21); g.lineWidth = 3; g.strokeStyle = degrade(g, 0, 0, w, h, [c1, c2]); g.stroke();
 
     g.textAlign = 'left'; g.textBaseline = 'top';
-    g.font = `800 52px ${FONTE}`; g.fillStyle = degrade(g, 24, 0, 24 + 70, 60, [c1, c2]); g.fillText(`${lugar}º`, 24, 22);
-    g.fillStyle = '#fff'; ajustar(g, l.nome, 800, 28, w - 48); g.fillText(l.nome, 24, 92);
-    g.font = `800 64px ${FONTE}`; g.fillText(String(l.desempenho), 24, 128);
-    g.font = `500 17px ${FONTE}`; g.fillStyle = COR.suave;
-    g.fillText('pontos de desempenho', 24, 198);
-    g.fillText(plural(l.participacao, 'participação', 'participações'), 24, 220);
+    g.font = `800 38px ${FONTE}`; g.fillStyle = degrade(g, 20, 0, 20 + 56, 48, [c1, c2]); g.fillText(`${lugar}º`, 20, 14);
+    g.fillStyle = '#fff'; ajustar(g, l.nome, 800, 23, w - 40); g.fillText(l.nome, 20, 62);
+    g.font = `800 50px ${FONTE}`; g.fillText(String(l.desempenho), 20, 90);
+    g.font = `500 14px ${FONTE}`; g.fillStyle = COR.suave;
+    g.fillText('pontos de desempenho', 20, 148);
+    g.fillText(plural(l.participacao, 'participação', 'participações'), 20, 166);
     g.restore();
   }
 
@@ -194,9 +197,9 @@
     const r = resultado();
     const top = r.tabela.slice(0, 3), resto = r.tabela.slice(3);
     const W = 1080, S = 2, M = 40, IN = W - 2 * M, BH = 300, GAP = 20, CW = (IN - 2 * GAP) / 3;
-    const RH = 54, RG = 8, HH = 36;
-    const podioH = top.length ? 250 * 1.14 : 0;
-    const H = M + BH + (top.length ? 28 + podioH : 0) + (resto.length ? 28 + HH + resto.length * (RH + RG) : 0) + M;
+    const RH = 38, RG = 4, HH = 28;
+    const podioH = top.length ? CARD_H * K1 : 0;
+    const H = M + BH + (top.length ? 20 + podioH : 0) + (resto.length ? 20 + HH + resto.length * (RH + RG) : 0) + M;
 
     const c = document.createElement('canvas');
     c.width = W * S; c.height = H * S;
@@ -207,26 +210,26 @@
 
     let y = M + BH;
     if (top.length) {
-      y += 28;
+      y += 20;
       const base = y + podioH;
       const xs = { 1: M + CW + GAP, 2: M, 3: M + 2 * (CW + GAP) };
       top.forEach((l, i) => desenharCard(g, l, i + 1, xs[i + 1], base, CW));
       y = base;
     }
     if (resto.length) {
-      y += 28;
-      g.textBaseline = 'middle'; g.fillStyle = COR.suave; g.font = `600 16px ${FONTE}`;
+      y += 20;
+      g.textBaseline = 'middle'; g.fillStyle = COR.suave; g.font = `600 14px ${FONTE}`;
       const cx = { pos: M + 32, nome: M + 120, des: M + 660, part: M + 890 };
       g.textAlign = 'left'; g.fillText('Posição', cx.pos, y + HH / 2); g.fillText('Nome', cx.nome, y + HH / 2);
       g.textAlign = 'center'; g.fillText('Pontos de desempenho', cx.des, y + HH / 2); g.fillText('Pontos de participação', cx.part, y + HH / 2);
       y += HH;
       resto.forEach((l, i) => {
-        caixa(g, M, y, IN, RH, 14); g.fillStyle = i % 2 ? COR.chumbo : COR.preto; g.fill();
+        caixa(g, M, y, IN, RH, 12); g.fillStyle = i % 2 ? COR.chumbo : COR.preto; g.fill();
         const m = y + RH / 2 + 1;
-        g.textAlign = 'left'; g.fillStyle = COR.suave; g.font = `700 20px ${FONTE}`; g.fillText(`${i + 4}º`, cx.pos, m);
-        g.fillStyle = '#fff'; ajustar(g, l.nome, 700, 22, 400); g.fillText(l.nome, cx.nome, m);
-        g.textAlign = 'center'; g.font = `800 24px ${FONTE}`; g.fillText(String(l.desempenho), cx.des, m);
-        g.fillStyle = COR.suave; g.font = `600 20px ${FONTE}`; g.fillText(String(l.participacao), cx.part, m);
+        g.textAlign = 'left'; g.fillStyle = COR.suave; g.font = `700 17px ${FONTE}`; g.fillText(`${i + 4}º`, cx.pos, m);
+        g.fillStyle = '#fff'; ajustar(g, l.nome, 700, 19, 400); g.fillText(l.nome, cx.nome, m);
+        g.textAlign = 'center'; g.font = `800 20px ${FONTE}`; g.fillText(String(l.desempenho), cx.des, m);
+        g.fillStyle = COR.suave; g.font = `600 17px ${FONTE}`; g.fillText(String(l.participacao), cx.part, m);
         y += RH + RG;
       });
     }
@@ -248,16 +251,18 @@
       const av = $('avisos'); av.hidden = false; av.textContent = e.message + ' Abra a página por um servidor (veja o README), não direto pelo arquivo.';
       return;
     }
-    const meses = [...new Set(eventos.map((e) => e.data.slice(0, 7)))].sort().reverse();
-    mesSel = meses[0] || '';
-    const box = $('meses');
+    const hoje = new Date();
+    const atual = `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, '0')}`;
+    // O mês atual sempre está na lista e começa selecionado, mesmo sem semanal registrado ainda.
+    const meses = [...new Set([...eventos.map((e) => e.data.slice(0, 7)), atual])].sort().reverse();
+    mesSel = atual;
+    const sel = $('mes');
     meses.forEach((m) => {
-      const b = document.createElement('button');
-      b.type = 'button'; b.className = 'btn btn-mes'; b.dataset.mes = m;
-      b.textContent = `${nomeMes(m)} ${m.slice(0, 4)}`;
-      b.addEventListener('click', () => { mesSel = m; render(); });
-      box.append(b);
+      const o = document.createElement('option');
+      o.value = m; o.textContent = `${nomeMes(m)} ${m.slice(0, 4)}`;
+      sel.append(o);
     });
+    sel.addEventListener('change', () => { mesSel = sel.value; render(); });
     $('baixar').addEventListener('click', baixar);
     render();
   }
