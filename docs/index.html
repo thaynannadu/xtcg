@@ -3,32 +3,38 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
   <title>Líder de Ginásio · XTCG Card Shop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="marca">
-    <img src="assets/logo.png" alt="XTCG Card Shop">
+  <header class="hero">
+    <div class="hero-texto">
+      <img class="hero-logo" src="assets/logo.png" alt="XTCG Card Shop">
+      <h1 id="titulo">Líder de Ginásio</h1>
+      <p id="subtitulo" class="sub"></p>
+    </div>
   </header>
 
   <main>
-    <h1 id="titulo">Líder de Ginásio</h1>
-
-    <div class="controles">
-      <label>Mês
-        <select id="mes"></select>
-      </label>
-      <button id="baixar" type="button">Baixar imagem</button>
+    <div class="barra">
+      <div id="meses" class="meses" role="group" aria-label="Escolher mês"></div>
+      <button id="baixar" class="btn btn-grad" type="button">Baixar imagem</button>
     </div>
 
     <div id="avisos" class="avisos" hidden></div>
 
-    <div class="rolagem">
+    <ol id="podio" class="podio" aria-label="Top 3"></ol>
+
+    <div class="rolagem" id="resto">
       <table id="tabela">
         <thead>
           <tr>
             <th scope="col">Posição</th>
-            <th scope="col">Nome</th>
+            <th scope="col" class="esq">Nome</th>
             <th scope="col">Pontos de desempenho</th>
             <th scope="col">Pontos de participação</th>
           </tr>
@@ -41,7 +47,7 @@
 
     <section class="semanais">
       <h2>Semanais contabilizados</h2>
-      <ul id="lista-semanais"></ul>
+      <ul id="lista-semanais" class="chips"></ul>
       <p class="regra">Desempenho = jogadores − colocação + 1. Participação = 1 ponto por semanal. Desempate pela participação.</p>
     </section>
   </main>

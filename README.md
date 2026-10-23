@@ -52,7 +52,13 @@ python3 -m http.server 8000
 
 e abra http://localhost:8000.
 
+## Visual
+
+Segue o design system da XTCG: preto #070707 e branco como cores principais, coral #e8513f, amarelo #efd456, marinho #08163b, azul #3f7cae e roxo #834084 como apoio, fonte Figtree (Google Fonts). A arte do banner está em `docs/assets/banner.jpg` e o logo em `docs/assets/logo.png`.
+
 ## Botões da página
 
 - Clicar no nome mostra de onde vieram os pontos (colocação em cada semanal).
-- "Baixar imagem" gera um PNG da tabela do mês selecionado, no estilo da tabela da loja.
+- Os botões de mês trocam a classificação exibida.
+- O top 3 aparece em destaque, no pódio.
+- "Baixar imagem" gera um PNG da classificação do mês selecionado, com banner e top 3.
