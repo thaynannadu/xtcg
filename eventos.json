@@ -1,0 +1,86 @@
+[
+  {
+    "data": "2026-09-03",
+    "nome": "Torneio semanal 03.09.2026",
+    "jogadores": [
+      "Victor Silva", "Renato Shippuden", "Rafael Ataide", "Thaynan Nadu",
+      "Matheus Mendes", "Thiago Oliveira", "Luis Silva", "Lara Rabelo",
+      "Paulo Assis", "Nickson Flores", "Italo Melucio", "André Luiz",
+      "Mateus Junior M", "Antônio Lucas"
+    ]
+  },
+  {
+    "data": "2026-09-10",
+    "nome": "Torneio semanal 10.09.26",
+    "jogadores": [
+      "Matheus Mendes", "Rodrigo Mendes", "Luis Silva", "Renato Shippuden",
+      "Thaynan Nadu", "Luiz Henrique M", "Rafael Ataide", "Thiago Oliveira",
+      "Fernando Heleno", "Victor Juliano", "Vitor Lacerda", "Antônio Lucas",
+      "Itallo Camisasca", "Italo Melucio", "Ketley Ricardo", "Mateus Junior M"
+    ]
+  },
+  {
+    "data": "2026-09-17",
+    "nome": "Torneio semanal 17.09.26",
+    "jogadores": [
+      "Antônio Lucas", "Renato Shippuden", "Thaynan Nadu", "Matheus Mendes",
+      "Lara Rabelo", "Luiz Gustavo Moreira", "Vitor Lacerda", "Victor Juliano",
+      "Bianca Muriel", "Thiago Oliveira", "Victor Silva", "Luis Silva",
+      "Rafael Ataide"
+    ]
+  },
+  {
+    "data": "2026-09-24",
+    "nome": "Torneio semanal 24.09.26",
+    "jogadores": [
+      "Matheus Mendes", "Renato Shippuden", "Nickson Flores", "Thaynan Nadu",
+      "Paulo Assis", "Thiago Oliveira", "Victor Silva", "Bianca Muriel",
+      "Rafael Ataide", "Luis Silva", "Antônio Lucas", "Victor Seixas",
+      "Luiz Henrique M", "Itallo Camisasca", "Mário André", "Fernando Heleno",
+      "Nicolas Miranda", "Lucas Vilela", "Italo Melucio", "Francisco Pires"
+    ]
+  },
+  {
+    "data": "2026-10-01",
+    "nome": "Torneio semanal 01.10.26",
+    "jogadores": [
+      "Renato Shippuden", "Alexander Oliveira", "Thaynan Nadu", "Matheus Mendes",
+      "Mário André", "Rodrigo Mendes", "Bianca Muriel", "Victor Silva",
+      "Italo Melucio", "Thiago Oliveira", "André Luiz", "Doutor Tutuco"
+    ]
+  },
+  {
+    "data": "2026-10-08",
+    "nome": "Torneio semanal 08.10.26",
+    "jogadores": [
+      "Thiago Oliveira", "Luis Silva", "Thaynan Nadu", "Renato Shippuden",
+      "Rodrigo Mendes", "Antônio Lucas", "Victor Silva", "Matheus Mendes",
+      "Doutor Tutuco", "Henrique Cardoso", "Lara Rabelo", "Mário André",
+      "Kayo Durães"
+    ]
+  },
+  {
+    "data": "2026-10-15",
+    "nome": "Torneio semanal 15.10.26",
+    "jogadores": [
+      "Matheus Mendes", "Luiz Gustavo Moreira", "Alexander Oliveira", "Bianca Muriel",
+      "Renato Shippuden", "Italo Melucio", "Luis Silva", "Victor Silva",
+      "Thaynan Nadu", "João Emanuel M", "Francisco Pires", "Victor Juliano",
+      "Lara Rabelo", "Calvin Lisboa", "Lucas Vilela", "Thiago Oliveira",
+      "Vinícius Fernandes", "Nicolas Miranda", "Mário André", "Fernando Heleno",
+      "Mateus Junior M", "Heitor Amaral", "Rafael Ataíde"
+    ]
+  },
+  {
+    "data": "2026-10-22",
+    "nome": "Torneio semanal 22.10.26",
+    "jogadores": [
+      "Matheus Mendes", "Guilherme Mourão", "Victor Silva", "Doutor Tutuco",
+      "Rodrigo Mendes", "Mário André", "Renato Shippuden", "Luiz Gustavo Moreira",
+      "Thaynan Nadu", "Lucas Fortes", "Antônio Lucas", "Fernando Heleno",
+      "Itallo Camisasca", "André Luiz", "Thiago Oliveira", "Victor Juliano",
+      "Luís Soares", "Italo Melucio", "Luã Abreu", "Luiz Henrique M",
+      "Bianca Muriel", "Lara Rabelo"
+    ]
+  }
+]
