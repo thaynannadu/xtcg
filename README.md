@@ -37,26 +37,6 @@ scripts/tabela.js                 imprime a tabela no terminal
 
 Mudou o mês? Não precisa fazer nada: a página cria o seletor de mês a partir das datas.
 
-## Publicar
-
-No GitHub: Settings → Pages → Branch `main`, pasta `/docs`. O GitHub Pages gratuito exige repositório público, e os resultados têm nomes de pessoas.
-
-## Rodar no seu computador
-
-Abrir o `index.html` direto pelo arquivo não funciona (o navegador bloqueia a leitura dos JSON). Use um servidor local:
-
-```
-cd docs
-python3 -m http.server 8000
-```
-
-e abra http://localhost:8000.
-
-## Visual
-
-Segue o design system da XTCG: preto #070707 e branco como cores principais, coral #e8513f, amarelo #efd456, marinho #08163b, azul #3f7cae e roxo #834084 como apoio, fonte Figtree (Google Fonts). A arte do banner está em `docs/assets/banner.jpg` e o logo em `docs/assets/logo.png`.
-
-## Botões da página
 
 - Clicar no nome mostra de onde vieram os pontos (colocação em cada semanal).
 - Os botões de mês trocam a classificação exibida.
