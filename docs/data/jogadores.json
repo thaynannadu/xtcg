@@ -31,5 +31,10 @@
   { "nome": "Luiz Henrique M" },
   { "nome": "Heitor Amaral" },
   { "nome": "Kayo", "aliases": ["Kayo Durães"] },
+  { "nome": "Paulo Assis" },
+  { "nome": "Nickson Flores" },
+  { "nome": "Vitor Lacerda" },
+  { "nome": "Ketley Ricardo" },
+  { "nome": "Victor Seixas" },
   { "nome": "Alexander Oliveira", "aliases": ["Alexandre"], "pontua": false, "nota": "Dono da loja. Ocupa colocação e conta no total de jogadores, mas não entra na tabela." }
 ]
