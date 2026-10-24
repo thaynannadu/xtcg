@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Semanais · XTCG Card Shop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-texto">
+      <img class="hero-logo" src="assets/logo.png" alt="XTCG Card Shop">
+      <h1>Semanais</h1>
+      <p id="subtitulo" class="sub"></p>
+    </div>
+  </header>
+
+  <main>
+    <nav class="nav" aria-label="Páginas">
+      <a href="index.html">Classificação</a>
+      <a href="semanais.html" aria-current="page">Semanais</a>
+    </nav>
+
+    <div class="barra">
+      <div class="filtros">
+        <label class="seletor">
+          <span class="sr">Mês</span>
+          <select id="mes"></select>
+        </label>
+        <label class="busca">
+          <span class="sr">Buscar jogador</span>
+          <input id="busca" type="search" placeholder="Buscar jogador" autocomplete="off">
+        </label>
+      </div>
+      <button id="alternar" class="btn btn-grad" type="button">Expandir tudo</button>
+    </div>
+
+    <ul id="eventos" class="eventos"></ul>
+    <p id="vazio" class="vazio" hidden></p>
+
+    <p class="regra">Pontos de desempenho = jogadores − colocação + 1, e cada jogador ganha mais 1 ponto de participação. O dono da loja ocupa colocação, mas não pontua. Quando o nome na tabela é um apelido, o nome impresso no resultado aparece ao lado, em cinza.</p>
+  </main>
+
+  <script src="calc.js"></script>
+  <script src="semanais.js"></script>
+</body>
+</html>

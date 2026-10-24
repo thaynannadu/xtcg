@@ -13,7 +13,9 @@ Guarda os resultados de cada semanal de Pokémon TCG e calcula a tabela do mês 
 
 ```
 docs/
-  index.html, style.css, app.js   página (GitHub Pages)
+  index.html, app.js              classificação do mês (GitHub Pages)
+  semanais.html, semanais.js      lista de cada semanal, com busca por jogador
+  style.css                       estilo compartilhado
   calc.js                         cálculo (usado pela página e pelo Node)
   assets/logo.png                 logo usado na página e na imagem exportada
   data/eventos.json               um item por semanal, jogadores na ordem da colocação
@@ -37,6 +39,31 @@ scripts/tabela.js                 imprime a tabela no terminal
 
 Mudou o mês? Não precisa fazer nada: a página cria o seletor de mês a partir das datas.
 
+## Publicar
+
+No GitHub: Settings → Pages → Branch `main`, pasta `/docs`. O GitHub Pages gratuito exige repositório público, e os resultados têm nomes de pessoas.
+
+## Rodar no seu computador
+
+Abrir o `index.html` direto pelo arquivo não funciona (o navegador bloqueia a leitura dos JSON). Use um servidor local:
+
+```
+cd docs
+python3 -m http.server 8000
+```
+
+e abra http://localhost:8000.
+
+## Visual
+
+Segue o design system da XTCG: preto #070707 e branco como cores principais, coral #e8513f, amarelo #efd456, marinho #08163b, azul #3f7cae e roxo #834084 como apoio, fonte Figtree (Google Fonts). A arte do banner está em `docs/assets/banner.jpg` e o logo em `docs/assets/logo.png`.
+
+## Páginas
+
+- **Classificação** (`index.html`): tabela do mês, com top 3 em destaque e imagem para baixar.
+- **Semanais** (`semanais.html`): um cartão por torneio, com o top 3 e a colocação completa. O filtro de mês abre no mês atual (há a opção "Todos os meses"), a busca por jogador procura pelo apelido ou pelo nome impresso e abre os semanais em que a pessoa jogou.
+
+## Botões da página
 
 - Clicar no nome mostra de onde vieram os pontos (colocação em cada semanal).
 - Os botões de mês trocam a classificação exibida.

@@ -55,7 +55,18 @@
     return { tabela, semCadastro: [...semCadastro], avisos, eventos: ordenados };
   }
 
-  const API = { calcular, norm };
+  // Lista um semanal com a colocação, o nome na tabela e os pontos de desempenho de cada jogador.
+  function detalharEvento(ev, jogadores) {
+    const idx = montarIndice(jogadores);
+    const n = ev.jogadores.length;
+    return ev.jogadores.map((impresso, i) => {
+      const cad = idx.get(norm(impresso));
+      const pontua = !cad || cad.pontua !== false;
+      return { pos: i + 1, de: n, impresso, nome: cad ? cad.nome : impresso, pontua, semCadastro: !cad, pontos: pontua ? n - i : null };
+    });
+  }
+
+  const API = { calcular, detalharEvento, norm };
   if (typeof module !== 'undefined' && module.exports) module.exports = API;
   else root.XTCG = API;
 })(typeof window !== 'undefined' ? window : globalThis);
