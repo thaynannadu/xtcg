@@ -75,7 +75,7 @@
       const pos = el('td', l.pos <= 3 ? `pos-medalha p${l.pos}` : '', `${l.pos}º`);
       const nome = el('td', 'nome-simples');
       nome.append(el('span', null, l.nome));
-      if (!l.pontua) nome.append(' ', el('small', null, '(dono da loja)'));
+      if (!l.pontua) nome.append(' ', el('small', null, ''));
       tr.append(pos, nome, el('td', 'num', num(l.v)), el('td', 'num', num(l.e)), el('td', 'num', num(l.d)), el('td', 'num ow', pct(l.ow)));
       tb.append(tr);
     });
