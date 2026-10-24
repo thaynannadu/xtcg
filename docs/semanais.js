@@ -1,6 +1,5 @@
 (function () {
   const $ = (id) => document.getElementById(id);
-  const norm = (s) => XTCG.norm(s);
   const MES_CURTO = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
   let eventos = [], jogadores = [], linhasDe = new Map(), tudoAberto = false;
 
@@ -10,23 +9,21 @@
     return n.charAt(0).toUpperCase() + n.slice(1);
   };
   const plural = (n, um, varios) => `${n} ${n === 1 ? um : varios}`;
+  const pct = (x) => (typeof x === 'number' ? x.toFixed(2).replace('.', ',') + '%' : '—');
+  const num = (x) => (typeof x === 'number' ? String(x) : '—');
+
+  function avisarSeSemEstilo() {
+    if (getComputedStyle(document.documentElement).getPropertyValue('--preto').trim()) return;
+    const p = document.createElement('p');
+    p.setAttribute('style', 'background:#fff3c4;color:#000;padding:12px;margin:0;font:16px sans-serif');
+    p.textContent = 'O arquivo style.css não foi carregado. Confira se ele está na mesma pasta do index.html e do semanais.html, com esse nome exato (sem "(1)" no final).';
+    document.body.prepend(p);
+  }
 
   async function json(url) {
     const r = await fetch(url);
     if (!r.ok) throw new Error(`Não consegui carregar ${url} (${r.status}).`);
     return r.json();
-  }
-
-  function filtrar() {
-    const mes = $('mes').value, q = norm($('busca').value);
-    return eventos.slice().sort((a, b) => b.data.localeCompare(a.data))
-      .filter((e) => mes === 'todos' || e.data.startsWith(mes))
-      .map((e) => {
-        const linhas = linhasDe.get(e);
-        const achados = q ? linhas.filter((l) => norm(l.nome).includes(q) || norm(l.impresso).includes(q)) : [];
-        return { e, linhas, achados };
-      })
-      .filter((x) => !q || x.achados.length);
   }
 
   function el(tag, classe, texto) {
@@ -36,7 +33,14 @@
     return n;
   }
 
-  function cartao({ e, linhas, achados }, aberto) {
+  function eventosDoMes() {
+    const mes = $('mes').value;
+    return eventos.slice().sort((a, b) => b.data.localeCompare(a.data))
+      .filter((e) => mes === 'todos' || e.data.startsWith(mes));
+  }
+
+  function cartao(e, aberto) {
+    const linhas = linhasDe.get(e);
     const li = el('li');
     const det = el('details', 'evento');
     det.open = aberto;
@@ -50,9 +54,8 @@
     info.append(el('span', 'titulo', e.nome), el('span', 'quantos', plural(linhas.length, 'jogador', 'jogadores')));
     const top = el('span', 'top3');
     linhas.slice(0, 3).forEach((l) => {
-      const chip = el('span', 'chip' + (l.pontua ? '' : ' fora'));
+      const chip = el('span', 'chip');
       chip.append(el('span', `medalha p${l.pos}`, String(l.pos)), l.nome);
-      if (!l.pontua) chip.title = 'Dono da loja: não pontua';
       top.append(chip);
     });
     info.append(top);
@@ -62,18 +65,18 @@
     const rol = el('div', 'rolagem');
     const tab = el('table', 'mini');
     const cab = el('thead'); const trc = el('tr');
-    [['Posição', ''], ['Nome', 'esq'], ['Pontos de desempenho', '']].forEach(([t, c]) => { const th = el('th', c, t); th.scope = 'col'; trc.append(th); });
+    [['Posição', '', ''], ['Nome', 'esq', ''], ['V', '', 'Vitórias'], ['E', '', 'Empates'], ['D', '', 'Derrotas'], ['Opp Win', '', "Opponents' Win %"]].forEach(([t, c, titulo]) => {
+      const th = el('th', c, t); th.scope = 'col'; if (titulo) th.title = titulo; trc.append(th);
+    });
     cab.append(trc);
     const tb = el('tbody');
-    const marcados = new Set(achados);
     linhas.forEach((l, i) => {
-      const tr = el('tr', 'linha' + (i % 2 ? ' alt' : '') + (marcados.has(l) ? ' achado' : '') + (l.pontua ? '' : ' fora'));
+      const tr = el('tr', 'linha' + (i % 2 ? ' alt' : ''));
       const pos = el('td', l.pos <= 3 ? `pos-medalha p${l.pos}` : '', `${l.pos}º`);
       const nome = el('td', 'nome-simples');
       nome.append(el('span', null, l.nome));
-      if (l.nome !== l.impresso) nome.append(' ', el('small', null, l.impresso));
-      if (!l.pontua) nome.append(' ', el('small', null, '(dono da loja, fora da pontuação)'));
-      tr.append(pos, nome, el('td', 'des', l.pontua ? String(l.pontos) : '—'));
+      if (!l.pontua) nome.append(' ', el('small', null, '(dono da loja)'));
+      tr.append(pos, nome, el('td', 'num', num(l.v)), el('td', 'num', num(l.e)), el('td', 'num', num(l.d)), el('td', 'num ow', pct(l.ow)));
       tb.append(tr);
     });
     tab.append(cab, tb);
@@ -85,26 +88,21 @@
   }
 
   function render() {
-    const itens = filtrar();
-    const q = $('busca').value.trim();
+    const itens = eventosDoMes();
     const mes = $('mes').value;
     const ul = $('eventos'); ul.replaceChildren();
-    itens.forEach((x, i) => ul.append(cartao(x, q ? true : (tudoAberto || i === 0))));
+    itens.forEach((e, i) => ul.append(cartao(e, tudoAberto || i === 0)));
 
-    $('subtitulo').textContent = q
-      ? `${plural(itens.length, 'semanal encontrado', 'semanais encontrados')}`
-      : `${plural(itens.length, 'semanal registrado', 'semanais registrados')}`;
+    $('subtitulo').textContent = plural(itens.length, 'semanal registrado', 'semanais registrados');
     const vazio = $('vazio');
     vazio.hidden = itens.length > 0;
-    if (!itens.length) {
-      vazio.textContent = q ? 'Nenhum semanal com esse jogador neste período.'
-        : `Nenhum semanal em ${mes === 'todos' ? 'nenhum mês' : nomeMes(mes)}. Adicione um em docs/data/eventos.json.`;
-    }
+    if (!itens.length) vazio.textContent = `Nenhum semanal em ${mes === 'todos' ? 'nenhum mês' : nomeMes(mes)}. Adicione um em docs/data/eventos.json.`;
     $('alternar').disabled = itens.length === 0;
     $('alternar').textContent = tudoAberto ? 'Recolher tudo' : 'Expandir tudo';
   }
 
   async function iniciar() {
+    avisarSeSemEstilo();
     try {
       [eventos, jogadores] = await Promise.all([json('data/eventos.json'), json('data/jogadores.json')]);
     } catch (e) {
@@ -122,7 +120,6 @@
     sel.value = atual;
 
     sel.addEventListener('change', render);
-    $('busca').addEventListener('input', render);
     $('alternar').addEventListener('click', () => {
       tudoAberto = !tudoAberto;
       document.querySelectorAll('#eventos details').forEach((d) => { d.open = tudoAberto; });

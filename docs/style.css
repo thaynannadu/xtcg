@@ -179,14 +179,6 @@ code { background: var(--preto); padding: 2px 6px; border-radius: 6px; }
 
 /* Página de semanais */
 .filtros { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-.busca input {
-  appearance: none; -webkit-appearance: none; font: inherit; font-weight: 600; color: var(--branco);
-  border: 2px solid transparent; border-radius: 999px; padding: 11px 22px; width: min(260px, 100%);
-  background: linear-gradient(var(--preto), var(--preto)) padding-box, linear-gradient(135deg, var(--cinza), var(--cinza)) border-box;
-}
-.busca input::placeholder { color: var(--texto-suave); font-weight: 400; }
-.busca input:focus { background: linear-gradient(var(--preto), var(--preto)) padding-box, var(--g-prata) border-box; }
-
 .eventos { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 details.evento {
   border: 2px solid var(--chumbo); border-radius: 22px; background: var(--preto); overflow: hidden;
@@ -212,7 +204,6 @@ details.evento[open] .data { background: var(--grafite); }
 .info .quantos { font-size: .85rem; color: var(--texto-suave); }
 .top3 { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
 .chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 12px 3px 4px; border-radius: 999px; background: var(--chumbo); font-size: .85rem; font-weight: 600; }
-.chip.fora { opacity: .6; }
 .medalha {
   display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%;
   font-size: .72rem; font-weight: 800; color: var(--preto);
@@ -226,13 +217,13 @@ details.evento[open] .seta { transform: rotate(225deg); }
 table.mini { min-width: 0; border-spacing: 0 3px; }
 table.mini td { padding: 7px 14px; }
 td.nome-simples { text-align: left; font-weight: 700; }
+table.mini td.num { font-variant-numeric: tabular-nums; }
+table.mini th { white-space: nowrap; }
 td.nome-simples small { font-weight: 400; font-size: .8rem; color: var(--texto-suave); }
 td.pos-medalha { font-weight: 800; }
 tr.linha td.pos-medalha.p1 { color: var(--amarelo); }
 tr.linha td.pos-medalha.p2 { color: #8fb7da; }
 tr.linha td.pos-medalha.p3 { color: #f08d7f; }
-tr.linha.achado td { background: #2b2610; }
-tr.linha.fora td { opacity: .6; }
 
 @media (max-width: 760px) {
   details.evento summary { grid-template-columns: auto 1fr; }

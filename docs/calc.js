@@ -7,6 +7,9 @@
       .toLowerCase().replace(/\s+/g, ' ').trim();
   }
 
+  // Cada jogador de um semanal pode ser só o nome (texto) ou um objeto { nome, v, d, e, ow }.
+  function nomeDe(item) { return typeof item === 'string' ? item : item.nome; }
+
   function montarIndice(jogadores) {
     const idx = new Map();
     for (const j of jogadores) {
@@ -28,7 +31,8 @@
     for (const ev of ordenados) {
       const n = ev.jogadores.length;
       const vistos = new Set();
-      ev.jogadores.forEach((nomeImpresso, i) => {
+      ev.jogadores.forEach((item, i) => {
+        const nomeImpresso = nomeDe(item);
         const pos = i + 1;
         const cadastro = idx.get(norm(nomeImpresso));
         const base = cadastro || { nome: nomeImpresso };
@@ -59,10 +63,12 @@
   function detalharEvento(ev, jogadores) {
     const idx = montarIndice(jogadores);
     const n = ev.jogadores.length;
-    return ev.jogadores.map((impresso, i) => {
+    return ev.jogadores.map((item, i) => {
+      const impresso = nomeDe(item);
       const cad = idx.get(norm(impresso));
       const pontua = !cad || cad.pontua !== false;
-      return { pos: i + 1, de: n, impresso, nome: cad ? cad.nome : impresso, pontua, semCadastro: !cad, pontos: pontua ? n - i : null };
+      return { pos: i + 1, de: n, impresso, nome: cad ? cad.nome : impresso, pontua, semCadastro: !cad, pontos: pontua ? n - i : null,
+        v: item.v, d: item.d, e: item.e, ow: item.ow };
     });
   }
 

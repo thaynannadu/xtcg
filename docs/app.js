@@ -243,7 +243,16 @@
     }, 'image/png');
   }
 
+  function avisarSeSemEstilo() {
+    if (getComputedStyle(document.documentElement).getPropertyValue('--preto').trim()) return;
+    const p = document.createElement('p');
+    p.setAttribute('style', 'background:#fff3c4;color:#000;padding:12px;margin:0;font:16px sans-serif');
+    p.textContent = 'O arquivo style.css não foi carregado. Confira se ele está na mesma pasta do index.html e do semanais.html, com esse nome exato (sem "(1)" no final).';
+    document.body.prepend(p);
+  }
+
   async function iniciar() {
+    avisarSeSemEstilo();
     try {
       [eventos, jogadores] = await Promise.all([json('data/eventos.json'), json('data/jogadores.json')]);
       [logo, arte] = await Promise.all([imagem('assets/logo.png'), imagem('assets/banner.jpg')]);
