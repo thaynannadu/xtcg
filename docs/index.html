@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=4">
+  <link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
   <header class="hero">
@@ -55,11 +55,20 @@
     <section class="semanais">
       <h2>Semanais contabilizados</h2>
       <ul id="lista-semanais" class="chips"></ul>
-      <p class="regra">Desempenho = jogadores − colocação + 1. Participação = 1 ponto por semanal. Desempate pela participação.</p>
     </section>
   </main>
 
-  <script src="calc.js?v=4"></script>
-  <script src="app.js?v=4"></script>
+  <footer class="rodape">
+    <h2>Como a classificação é calculada</h2>
+    <ul>
+      <li>Pontos de desempenho: jogadores − colocação + 1, em cada semanal.</li>
+      <li>Pontos de participação: 1 por semanal jogado.</li>
+      <li>Desempate: primeiro, o maior número de participações nas ligas; depois, o melhor posicionamento nos semanais.</li>
+      <li>O dono da loja ocupa colocação, mas não pontua.</li>
+    </ul>
+  </footer>
+
+  <script src="calc.js?v=6"></script>
+  <script src="app.js?v=6"></script>
 </body>
 </html>

@@ -1,0 +1,8 @@
+// Decks dos semanais. Uma data por bloco, e uma linha por jogador no formato "Jogador: deck".
+// Aceita nome ou apelido do jogador, e o deck pode ser escrito do seu jeito ("Dragapult ex Dusknoir", "dragapult e dusknoir").
+// Linhas que começam com // são comentários. Quem não for listado fica sem deck na página.
+//
+// Exemplo (apague o // para usar):
+// # 2026-10-22
+// Matheus Mendes: Dragapult ex
+// Guilherme Mourão: Ogerpon e Clefairy

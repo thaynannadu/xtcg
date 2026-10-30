@@ -256,5 +256,25 @@
       { "nome": "Bianca Muriel", "v": 1, "d": 4, "e": 0, "ow": 46.00 },
       { "nome": "Lara Rabelo", "v": 0, "d": 5, "e": 0, "ow": 48.00 }
     ]
+  },
+  {
+    "data": "2026-10-29",
+    "nome": "Torneio semanal 29.10.26",
+    "jogadores": [
+      { "nome": "Victor Silva", "v": 4, "d": 0, "e": 0, "ow": 62.50 },
+      { "nome": "Nickson Flores", "v": 3, "d": 1, "e": 0, "ow": 62.50 },
+      { "nome": "Thaynan Nadu", "v": 3, "d": 1, "e": 0, "ow": 56.25 },
+      { "nome": "Renato Shippuden", "v": 3, "d": 1, "e": 0, "ow": 56.25 },
+      { "nome": "Doutor Tutuco", "v": 2, "d": 2, "e": 0, "ow": 58.33 },
+      { "nome": "Bianca Muriel", "v": 2, "d": 2, "e": 0, "ow": 52.08 },
+      { "nome": "Luís Soares", "v": 2, "d": 2, "e": 0, "ow": 43.75 },
+      { "nome": "Alexander Oliveira", "v": 2, "d": 2, "e": 0, "ow": 43.75 },
+      { "nome": "Luiz Henrique M", "v": 2, "d": 2, "e": 0, "ow": 43.75 },
+      { "nome": "Thiago Oliveira", "v": 2, "d": 2, "e": 0, "ow": 41.67 },
+      { "nome": "Italo Melucio", "v": 1, "d": 3, "e": 0, "ow": 56.25 },
+      { "nome": "Paulo M", "v": 1, "d": 3, "e": 0, "ow": 45.83 },
+      { "nome": "Ketley Ricardo", "v": 1, "d": 3, "e": 0, "ow": 41.67 },
+      { "nome": "Itallo Camisasca", "v": 0, "d": 2, "e": 0, "ow": 75.00 }
+    ]
   }
 ]

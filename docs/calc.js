@@ -54,8 +54,16 @@
       });
     }
 
+    // Desempate: mais pontos de desempenho, depois mais participações e, por fim, o melhor
+    // posicionamento nos semanais (a melhor colocação; se igualar, a segunda melhor, e assim por diante).
+    const colocacoes = (r) => r.detalhes.map((d) => d.pos).sort((x, y) => x - y);
+    const porColocacao = (a, b) => {
+      const pa = colocacoes(a), pb = colocacoes(b);
+      for (let i = 0; i < Math.min(pa.length, pb.length); i++) if (pa[i] !== pb[i]) return pa[i] - pb[i];
+      return 0;
+    };
     const tabela = [...acc.values()].sort((a, b) =>
-      b.desempenho - a.desempenho || b.participacao - a.participacao || a.ordem - b.ordem);
+      b.desempenho - a.desempenho || b.participacao - a.participacao || porColocacao(a, b) || a.ordem - b.ordem);
     return { tabela, semCadastro: [...semCadastro], avisos, eventos: ordenados };
   }
 
@@ -72,7 +80,13 @@
     });
   }
 
-  const API = { calcular, detalharEvento, norm };
+  // Devolve uma função que transforma qualquer nome ou apelido na chave do jogador cadastrado.
+  function criarChave(jogadores) {
+    const idx = montarIndice(jogadores);
+    return (nome) => norm((idx.get(norm(nome)) || { nome }).nome);
+  }
+
+  const API = { calcular, detalharEvento, criarChave, norm };
   if (typeof module !== 'undefined' && module.exports) module.exports = API;
   else root.XTCG = API;
 })(typeof window !== 'undefined' ? window : globalThis);
