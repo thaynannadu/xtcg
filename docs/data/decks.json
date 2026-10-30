@@ -38,7 +38,7 @@
     { "nome": "Metagross", "icones": ["metagross"], "palavras": ["metagross"] },
     { "nome": "Venusaur Mega", "icones": ["venusaur-mega"], "palavras": ["venusaur"] },
     { "nome": "Chandelure Mega", "icones": ["chandelure-mega"], "palavras": ["chandelure"] },
-    { "nome": "Beedrill", "icones": ["beedrill"], "palavras": ["beedrill"] }
+    { "nome": "Beedrill", "icones": ["beedrill"], "palavras": ["beedrill"] },
     { "nome": "Arboliva", "icones": ["arboliva"], "palavras": ["arboliva", "Arboliva", "ArbolivaEx"] }
   ]
 }
