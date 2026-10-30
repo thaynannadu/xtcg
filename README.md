@@ -1,5 +1,4 @@
 # Líder de Ginásio · XTCG Card Shop
-
 Guarda os resultados de cada semanal de Pokémon TCG e calcula a tabela do mês a partir deles.
 
 ## Regra
@@ -7,7 +6,6 @@ Guarda os resultados de cada semanal de Pokémon TCG e calcula a tabela do mês 
 - Pontos de desempenho = jogadores − colocação + 1 (o 1º de um semanal com 23 jogadores faz 23).
 - Pontos de participação = 1 por semanal jogado.
 - Desempate: primeiro, o maior número de participações nas ligas; depois, o melhor posicionamento nos semanais (a melhor colocação; se igualar, a segunda melhor, e assim por diante). Se ainda sobrar empate, vale quem apareceu primeiro.
-- O dono da loja ocupa colocação e conta no total de jogadores, mas não aparece na tabela (`"pontua": false` em `jogadores.json`).
 
 ## Estrutura
 
