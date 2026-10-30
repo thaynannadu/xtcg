@@ -83,9 +83,9 @@ A página de semanais mostra o deck de cada jogador com os ícones dos Pokémon,
 1. Em `docs/data/decks.txt`, abra um bloco com a data do semanal e liste um jogador por linha:
    ```
    # 2026-10-22
-   Matheus Mendes: Dragapult ex
-   Guilherme Mourão: Ogerpon e Clefairy
-   Victor Pai: dragapult dusknoir
+   Jogador 1: Dragapult ex
+   Jogador 2: Ogerpon e Clefairy
+   Jogador 3: dragapult dusknoir
    ```
    Pode usar nome ou apelido do jogador (o do `jogadores.json`) e escrever o deck do seu jeito. A data aceita `2026-10-22` ou `22.10.26`. O separador pode ser `:`, ` - ` ou ` | `. Linhas com `//` no começo são comentários. Quem não for listado fica sem deck, e semanais sem nenhum deck não mostram a coluna.
 2. Rode `node scripts/conferir-decks.js` para ver o que o site entendeu. A própria página também mostra um aviso amarelo quando um nome não aparece no semanal ou quando um deck não é reconhecido.
