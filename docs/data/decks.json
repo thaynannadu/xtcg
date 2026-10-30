@@ -23,7 +23,7 @@
     { "nome": "Archaludon / Zoroark", "icones": ["archaludon", "zoroark"], "palavras": ["archaludon", "zoroark"] },
     { "nome": "Slowking", "icones": ["slowking"], "palavras": ["slowking"] },
     { "nome": "Sharpedo Mega / Toxtricity", "icones": ["sharpedo-mega", "toxtricity"], "palavras": ["sharpedo", "toxtricity"] },
-    { "nome": "Lucario Mega / Hariyama", "icones": ["lucario-mega", "hariyama"], "palavras": ["lucario", "hariyama","Lucario","Mega Lucario"] },
+    { "nome": "Lucario Mega / Hariyama", "icones": ["lucario-mega", "hariyama"], "palavras": ["lucario", "hariyama","Lucario","MegaLucario"] },
     { "nome": "Lopunny Mega / Dusknoir", "icones": ["lopunny-mega", "dusknoir"], "palavras": ["lopunny", "dusknoir"] },
     { "nome": "Lopunny Mega / Dudunsparce", "icones": ["lopunny-mega", "dudunsparce"], "palavras": ["lopunny", "dudunsparce"] },
     { "nome": "Mew / Clefairy", "icones": ["mew", "clefairy"], "palavras": ["mew", "clefairy"] },
@@ -33,12 +33,12 @@
     { "nome": "Trevenant", "icones": ["trevenant"], "palavras": ["trevenant"] },
     { "nome": "Honchkrow / Porygon2", "icones": ["honchkrow", "porygon2"], "palavras": ["honchkrow", "porygon2"] },
     { "nome": "Mewtwo / Spidops", "icones": ["mewtwo", "spidops"], "palavras": ["mewtwo", "spidops"] },
-    { "nome": "Grimmsnarl / Froslass", "icones": ["grimmsnarl", "froslass"], "palavras": ["grimmsnarl", "froslass", "grimm", "Grimm", "Grimmsnarl Ex"] },
+    { "nome": "Grimmsnarl / Froslass", "icones": ["grimmsnarl", "froslass"], "palavras": ["grimmsnarl", "froslass", "grimm", "Grimm", "GrimmsnarlEx"] },
     { "nome": "Excadrill Mega", "icones": ["excadrill-mega"], "palavras": ["excadrill"] },
     { "nome": "Metagross", "icones": ["metagross"], "palavras": ["metagross"] },
     { "nome": "Venusaur Mega", "icones": ["venusaur-mega"], "palavras": ["venusaur"] },
     { "nome": "Chandelure Mega", "icones": ["chandelure-mega"], "palavras": ["chandelure"] },
     { "nome": "Beedrill", "icones": ["beedrill"], "palavras": ["beedrill"] }
-    { "nome": "Arboliva", "icones": ["arboliva"], "palavras": ["arboliva", "Arboliva", "Arboliva Ex"] }
+    { "nome": "Arboliva", "icones": ["arboliva"], "palavras": ["arboliva", "Arboliva", "ArbolivaEx"] }
   ]
 }
