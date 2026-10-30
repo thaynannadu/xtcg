@@ -22,6 +22,9 @@ docs/
   data/decks.txt                  decks de cada semanal, escritos à mão
   decks.js                        leitura do decks.txt e reconhecimento dos decks
 scripts/tabela.js                 imprime a tabela no terminal
+scripts/validar-dados.js          valida integridade dos dados
+tests/calc.test.js                testes automatizados do cálculo
+.github/workflows/validate.yml    validação automática em push e pull request
 ```
 
 ## Adicionar um semanal
@@ -37,9 +40,10 @@ scripts/tabela.js                 imprime a tabela no terminal
      ]
    }
    ```
-   Use os nomes como saem no resultado impresso. Só o `nome` é obrigatório para a pontuação, mas a página de semanais mostra `v`, `d`, `e` e `ow`.
+   Use os nomes como saem no resultado impresso. Só o `nome` é obrigatório para a pontuação, mas a página de semanais mostra `v`, `d`, `e` e `ow`. Na tabela, a ordem é **Vitórias (V), Derrotas (D), Empates (E)** e Opp Win.
 2. Se aparecer alguém novo, ou um apelido, cadastre em `docs/data/jogadores.json`. Quem não estiver lá entra com o nome impresso, e a página mostra um aviso.
-3. Rode `node scripts/tabela.js 2026-10` para conferir e faça o commit.
+3. Rode `node scripts/validar-dados.js` para validar os arquivos e `node --test tests/*.test.js` para executar os testes.
+4. Rode `node scripts/tabela.js 2026-10` para conferir a classificação e faça o commit. A validação acusa duplicações de jogadores e impede que dados inválidos sejam publicados pelo fluxo automatizado.
 
 Mudou o mês? Não precisa fazer nada: a página cria o seletor de mês a partir das datas.
 
@@ -65,7 +69,7 @@ Segue o design system da XTCG: preto #070707 e branco como cores principais, cor
 ## Páginas
 
 - **Classificação** (`index.html`): tabela do mês, com top 3 em destaque e imagem para baixar.
-- **Semanais** (`semanais.html`): um cartão por torneio, com o top 3 e a colocação completa (vitórias, empates, derrotas e Opp Win). O filtro de mês abre no mês atual, e há a opção "Todos os meses".
+- **Semanais** (`semanais.html`): um cartão por torneio, com o top 3 e a colocação completa (vitórias, derrotas, empates e Opp Win). O filtro de mês abre no mês atual, e há a opção "Todos os meses".
 
 ## Botões da página
 

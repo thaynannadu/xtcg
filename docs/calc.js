@@ -29,8 +29,24 @@
 
     const ordenados = [...eventos].sort((a, b) => a.data.localeCompare(b.data));
     for (const ev of ordenados) {
-      const n = ev.jogadores.length;
       const vistos = new Set();
+      let duplicado = false;
+      for (const item of ev.jogadores) {
+        const nome = nomeDe(item);
+        const cadastro = idx.get(norm(nome));
+        const base = cadastro || { nome };
+        if (base.pontua === false) continue;
+        const chave = norm(base.nome);
+        if (vistos.has(chave)) {
+          avisos.push(`${base.nome} aparece duas vezes em ${ev.data}; o evento foi ignorado no cálculo.`);
+          duplicado = true;
+          break;
+        }
+        vistos.add(chave);
+      }
+      if (duplicado) continue;
+
+      const n = ev.jogadores.length;
       ev.jogadores.forEach((item, i) => {
         const nomeImpresso = nomeDe(item);
         const pos = i + 1;
@@ -40,8 +56,6 @@
         if (base.pontua === false) return;
 
         const chave = norm(base.nome);
-        if (vistos.has(chave)) avisos.push(`${base.nome} aparece duas vezes em ${ev.data}.`);
-        vistos.add(chave);
 
         if (!acc.has(chave)) {
           acc.set(chave, { nome: base.nome, nota: base.nota || '', desempenho: 0, participacao: 0, detalhes: [], ordem: ordem++ });

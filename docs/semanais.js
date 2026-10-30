@@ -69,7 +69,7 @@
     const mapaDecks = decksPorData.get(e.data);
     const chave = XTCG.criarChave(jogadores);
     const temDeck = !!(mapaDecks && mapaDecks.size);
-    [['Posição', '', ''], ['Nome', 'esq', ''], ...(temDeck ? [['Deck', 'esq', '']] : []), ['V', '', 'Vitórias'], ['E', '', 'Empates'], ['D', '', 'Derrotas'], ['Opp Win', '', "Opponents' Win %"]].forEach(([t, c, titulo]) => {
+    [['Posição', '', ''], ['Nome', 'esq', ''], ...(temDeck ? [['Deck', 'esq', '']] : []), ['V', '', 'Vitórias'], ['D', '', 'Derrotas'], ['E', '', 'Empates'], ['Opp Win', '', "Opponents' Win %"]].forEach(([t, c, titulo]) => {
       const th = el('th', c, t); th.scope = 'col'; if (titulo) th.title = titulo; trc.append(th);
     });
     cab.append(trc);
@@ -79,7 +79,7 @@
       const pos = el('td', l.pos <= 3 ? `pos-medalha p${l.pos}` : '', `${l.pos}º`);
       const nome = el('td', 'nome-simples');
       nome.append(el('span', null, l.nome));
-      tr.append(pos, nome, ...(temDeck ? [celulaDeck(mapaDecks.get(chave(l.impresso)))] : []), el('td', 'num', num(l.v)), el('td', 'num', num(l.e)), el('td', 'num', num(l.d)), el('td', 'num ow', pct(l.ow)));
+      tr.append(pos, nome, ...(temDeck ? [celulaDeck(mapaDecks.get(chave(l.impresso)))] : []), el('td', 'num', num(l.v)), el('td', 'num', num(l.d)), el('td', 'num', num(l.e)), el('td', 'num ow', pct(l.ow)));
       tb.append(tr);
     });
     tab.append(cab, tb);
