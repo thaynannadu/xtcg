@@ -24,6 +24,7 @@
     { "nome": "Slowking", "icones": ["slowking"], "palavras": ["slowking"] },
     { "nome": "Sharpedo Mega / Toxtricity", "icones": ["sharpedo-mega", "toxtricity"], "palavras": ["sharpedo", "toxtricity"] },
     { "nome": "Lucario Mega / Hariyama", "icones": ["lucario-mega", "hariyama"], "palavras": ["lucario", "hariyama","Lucario","MegaLucario"] },
+    { "nome": "Lucario Mega", "icones": ["lucario-mega"], "palavras": ["lucario","Lucario","MegaLucario"]},
     { "nome": "Lopunny Mega / Dusknoir", "icones": ["lopunny-mega", "dusknoir"], "palavras": ["lopunny", "dusknoir"] },
     { "nome": "Lopunny Mega / Dudunsparce", "icones": ["lopunny-mega", "dudunsparce"], "palavras": ["lopunny", "dudunsparce"] },
     { "nome": "Mew / Clefairy", "icones": ["mew", "clefairy"], "palavras": ["mew", "clefairy"] },
