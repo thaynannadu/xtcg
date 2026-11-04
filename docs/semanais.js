@@ -4,28 +4,9 @@
   let eventos = [], jogadores = [], linhasDe = new Map(), tudoAberto = false;
   let cfgDecks = { iconesBase: '', iconesExt: '.png' }, registro = [], decksPorData = new Map();
 
-  const nomeMes = (ym) => {
-    const [a, m] = ym.split('-').map(Number);
-    const n = new Date(a, m - 1, 1).toLocaleDateString('pt-BR', { month: 'long' });
-    return n.charAt(0).toUpperCase() + n.slice(1);
-  };
-  const plural = (n, um, varios) => `${n} ${n === 1 ? um : varios}`;
+  const { nomeMes, plural, dataCurta, json, mesDe } = Util;
   const pct = (x) => (typeof x === 'number' ? x.toFixed(2).replace('.', ',') + '%' : '—');
   const num = (x) => (typeof x === 'number' ? String(x) : '—');
-
-  function avisarSeSemEstilo() {
-    if (getComputedStyle(document.documentElement).getPropertyValue('--preto').trim()) return;
-    const p = document.createElement('p');
-    p.setAttribute('style', 'background:#fff3c4;color:#000;padding:12px;margin:0;font:16px sans-serif');
-    p.textContent = 'O arquivo style.css não foi carregado. Confira se ele está na mesma pasta do index.html e do semanais.html, com esse nome exato (sem "(1)" no final).';
-    document.body.prepend(p);
-  }
-
-  async function json(url) {
-    const r = await fetch(url);
-    if (!r.ok) throw new Error(`Não consegui carregar ${url} (${r.status}).`);
-    return r.json();
-  }
 
   function el(tag, classe, texto) {
     const n = document.createElement(tag);
@@ -37,7 +18,7 @@
   function eventosDoMes() {
     const mes = $('mes').value;
     return eventos.slice().sort((a, b) => b.data.localeCompare(a.data))
-      .filter((e) => mes === 'todos' || e.data.startsWith(mes));
+      .filter((e) => mes === 'todos' || mesDe(e.data) === mes);
   }
 
   function cartao(e, aberto) {
@@ -140,7 +121,6 @@
     av.hidden = avisos.length === 0 || !new URLSearchParams(location.search).has('avisos');
   }
 
-  const dataCurta = (iso) => iso.slice(8, 10) + '.' + iso.slice(5, 7);
 
   function celulaDeck(info) {
     const td = el('td', 'deck-cel');
@@ -148,13 +128,7 @@
     const box = el('span', 'deck');
     if (info.deck) {
       const ic = el('span', 'icones');
-      info.deck.icones.forEach((slug) => {
-        const img = document.createElement('img');
-        img.src = cfgDecks.iconesBase + slug + (cfgDecks.iconesExt || '.png');
-        img.alt = ''; img.loading = 'lazy'; img.decoding = 'async';
-        img.addEventListener('error', () => img.replaceWith(el('span', 'icone-falha', slug.replace(/-/g, ' '))));
-        ic.append(img);
-      });
+      info.deck.icones.forEach((slug) => ic.append(Util.iconeImg(cfgDecks, slug)));
       box.append(ic, el('span', 'deck-nome', info.deck.nome));
       box.title = info.deck.nome;
     } else {
@@ -166,7 +140,7 @@
   }
 
   async function iniciar() {
-    avisarSeSemEstilo();
+    Util.avisarSeSemEstilo();
     try {
       [eventos, jogadores] = await Promise.all([json('data/eventos.json'), json('data/jogadores.json')]);
     } catch (e) {
@@ -176,13 +150,12 @@
     eventos.forEach((e) => linhasDe.set(e, XTCG.detalharEvento(e, jogadores)));
     await carregarDecks();
 
-    const hoje = new Date();
-    const atual = `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, '0')}`;
-    const meses = [...new Set([...eventos.map((e) => e.data.slice(0, 7)), atual])].sort().reverse();
+    // Só aparecem meses que têm semanal registrado.
+    const meses = Util.mesesComDados(eventos);
     const sel = $('mes');
     meses.forEach((m) => { const o = el('option', null, `${nomeMes(m)} ${m.slice(0, 4)}`); o.value = m; sel.append(o); });
     const todos = el('option', null, 'Todos os meses'); todos.value = 'todos'; sel.append(todos);
-    sel.value = atual;
+    sel.value = meses.length ? Util.mesPadrao(meses, Util.mesAtual()) : 'todos';
 
     sel.addEventListener('change', render);
     $('alternar').addEventListener('click', () => {

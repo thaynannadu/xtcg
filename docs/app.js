@@ -4,40 +4,21 @@
   let cfgDecks = { iconesBase: '', iconesExt: '.png' }, ultimoDeck = new Map();
   const MOSTRAR_AVISOS = new URLSearchParams(location.search).has('avisos');
 
-  const nomeMes = (ym) => {
-    const [a, m] = ym.split('-').map(Number);
-    const n = new Date(a, m - 1, 1).toLocaleDateString('pt-BR', { month: 'long' });
-    return n.charAt(0).toUpperCase() + n.slice(1);
-  };
-  const dataCurta = (iso) => iso.slice(8, 10) + '.' + iso.slice(5, 7);
-  const dataBarra = (iso) => iso.slice(8, 10) + '/' + iso.slice(5, 7);
-  // Quintas-feiras do mês: é o total de semanais esperado desde o início do mês.
-  function quintasDoMes(ym) {
-    const [a, m] = ym.split('-').map(Number);
-    const dias = new Date(a, m, 0).getDate();
-    let n = 0;
-    for (let d = 1; d <= dias; d++) if (new Date(a, m - 1, d).getDay() === 4) n++;
-    return n;
-  }
-  const totalSemanais = (ym) => Math.max(quintasDoMes(ym), eventos.filter((e) => e.data.startsWith(ym)).length);
-  const plural = (n, um, varios) => `${n} ${n === 1 ? um : varios}`;
+  const { nomeMes, plural, dataCurta, dataBarra, json, mesDe } = Util;
+  const totalDoMes = () => Util.totalSemanais(eventos, mesSel);
 
-  async function json(url) {
-    const r = await fetch(url);
-    if (!r.ok) throw new Error(`Não consegui carregar ${url} (${r.status}).`);
-    return r.json();
-  }
-  function imagem(src) {
+  // As imagens do banner só são necessárias para exportar; a página não espera por elas.
+  const imagem = (src) => {
     return new Promise((ok, erro) => {
       const i = new Image();
       i.onload = () => ok(i);
       i.onerror = () => erro(new Error(`Não achei ${src}.`));
       i.src = src;
     });
-  }
+  };
 
   function resultado() {
-    return XTCG.calcular(eventos.filter((e) => e.data.startsWith(mesSel)), jogadores);
+    return XTCG.calcular(eventos.filter((e) => mesDe(e.data) === mesSel), jogadores);
   }
 
   function listaDetalhes(l) {
@@ -61,14 +42,7 @@
     if (!u || !u.deck) return null;
     const box = document.createElement('span'); box.className = 'deck-podio';
     box.title = `Último deck (${dataBarra(u.data)}): ${u.deck.nome}`;
-    u.deck.icones.forEach((slug) => {
-      const img = document.createElement('img');
-      img.src = cfgDecks.iconesBase + slug + (cfgDecks.iconesExt || '.png');
-      img.alt = u.deck.nome; img.loading = 'lazy'; img.decoding = 'async';
-      // Se a imagem não carregar, mostra o nome do Pokémon em texto no lugar.
-      img.addEventListener('error', () => { const t = document.createElement('span'); t.className = 'icone-falha'; t.textContent = slug.replace(/-/g, ' '); img.replaceWith(t); });
-      box.append(img);
-    });
+    u.deck.icones.forEach((slug) => box.append(Util.iconeImg(cfgDecks, slug, u.deck.nome)));
     return box;
   }
 
@@ -104,7 +78,7 @@
       const forte = document.createElement('strong'); forte.textContent = l.desempenho;
       pts.append(forte, ' pts');
       const part = document.createElement('p'); part.className = 'part';
-      const tot = totalSemanais(mesSel);
+      const tot = totalDoMes();
       part.textContent = `${l.participacao}/${tot}`; part.title = `${plural(l.participacao, 'participação', 'participações')} em ${plural(tot, 'semanal', 'semanais')}`;
       li.append(pos, ...(dk ? [dk] : []), h, pts, part);
 
@@ -121,6 +95,7 @@
   }
 
   function renderResto(resto) {
+    const total = totalDoMes();
     const corpo = $('tabela').tBodies[0];
     corpo.replaceChildren();
     resto.forEach((l, i) => {
@@ -132,7 +107,7 @@
       b.type = 'button'; b.textContent = l.nome; b.setAttribute('aria-expanded', 'false');
       nome.append(b);
       const d = document.createElement('td'); d.className = 'des'; d.textContent = l.desempenho;
-      const p = document.createElement('td'); p.textContent = `${l.participacao}/${totalSemanais(mesSel)}`;
+      const p = document.createElement('td'); p.textContent = `${l.participacao}/${total}`;
       tr.append(pos, nome, d, p);
       corpo.append(tr);
 
@@ -188,7 +163,12 @@
   const GRAD = { 1: [COR.amarelo, COR.coral], 2: [COR.azul, COR.roxo], 3: [COR.coral, COR.roxo] };
   const FONTE = 'Figtree, "Helvetica Neue", Arial, sans-serif';
 
-  function caixa(g, x, y, w, h, r) { g.beginPath(); g.roundRect(x, y, w, h, r); }
+  function caixa(g, x, y, w, h, r) {
+    g.beginPath();
+    if (g.roundRect) { g.roundRect(x, y, w, h, r); return; }
+    g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r);
+    g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath();
+  }
   function degrade(g, x0, y0, x1, y1, cores) {
     const d = g.createLinearGradient(x0, y0, x1, y1);
     d.addColorStop(0, cores[0]); d.addColorStop(1, cores[1]);
@@ -230,7 +210,7 @@
 
   const CARD_H = 224, K1 = 1.1, ALTURA = { 1: 1, 2: 0.9, 3: 0.8 };
 
-  function desenharCard(g, l, lugar, x, yBase, cw) {
+  function desenharCard(g, l, lugar, x, yBase, cw, total) {
     const k = lugar === 1 ? K1 : 1, ch = CARD_H * K1 * ALTURA[lugar], y = yBase - ch;
     const [c1, c2] = GRAD[lugar];
     g.save();
@@ -242,22 +222,25 @@
     caixa(g, 1.5, 1.5, w - 3, h - 3, 11); g.lineWidth = 3; g.strokeStyle = degrade(g, 0, 0, w, h, [c1, c2]); g.stroke();
 
     g.textAlign = 'left'; g.textBaseline = 'top';
-    g.font = `800 38px ${FONTE}`; g.fillStyle = degrade(g, 20, 0, 20 + 56, 48, [c1, c2]); g.fillText(`${lugar}º`, 20, 14);
+    g.font = `800 38px ${FONTE}`; g.fillStyle = degrade(g, 20, h - 160, 20 + 56, h - 112, [c1, c2]); g.fillText(`${lugar}º`, 20, h - 160);
     g.fillStyle = '#fff'; ajustar(g, l.nome, 800, 25, w - 40); g.textBaseline = 'alphabetic'; g.fillText(l.nome, 20, h - 26 - 62); g.textBaseline = 'top';
     g.textBaseline = 'alphabetic';
     g.font = `800 62px ${FONTE}`; g.fillStyle = '#fff'; g.fillText(String(l.desempenho), 20, h - 26);
     const larg = g.measureText(String(l.desempenho)).width;
     g.font = `500 20px ${FONTE}`; g.fillStyle = COR.suave;
     g.fillText('pts', 20 + larg + 8, h - 26);
-    g.font = `800 26px ${FONTE}`; g.fillStyle = '#fff'; g.textAlign = 'right';
-    g.fillText(`${l.participacao}/${totalSemanais(mesSel)}`, w - 20, h - 26);
+    g.font = `300 18px ${FONTE}`; g.fillStyle = '#fff'; g.textAlign = 'right';
+    g.fillText(`${l.participacao}/${total}`, w - 20, h - 26);
     g.textAlign = 'left'; g.textBaseline = 'top';
     g.restore();
   }
 
   async function baixar() {
-    try { await Promise.all([document.fonts.load(`800 40px Figtree`), document.fonts.load(`500 20px Figtree`)]); } catch (e) { /* segue com a fonte reserva */ }
-    const r = resultado();
+    const btn = $('baixar'); btn.disabled = true;
+    try { [logo, arte] = logo && arte ? [logo, arte] : await Promise.all([imagem('assets/logo.png'), imagem('assets/banner.jpg')]); }
+    catch (e) { btn.disabled = false; alert(e.message); return; }
+    try { await Promise.all([document.fonts.load(`800 40px Figtree`), document.fonts.load(`500 20px Figtree`), document.fonts.load(`300 20px Figtree`)]); } catch (e) { /* segue com a fonte reserva */ }
+    const r = resultado(), total = totalDoMes();
     const top = r.tabela.slice(0, 3), resto = r.tabela.slice(3);
     const W = 1080, S = 2, M = 40, IN = W - 2 * M, BH = 300, GAP = 20, CW = (IN - 2 * GAP) / 3;
     const RH = 38, RG = 4, HH = 28;
@@ -276,7 +259,7 @@
       y += 20;
       const base = y + podioH;
       const xs = { 1: M, 2: M + CW + GAP, 3: M + 2 * (CW + GAP) };
-      top.forEach((l, i) => desenharCard(g, l, i + 1, xs[i + 1], base, CW));
+      top.forEach((l, i) => desenharCard(g, l, i + 1, xs[i + 1], base, CW, total));
       y = base;
     }
     if (resto.length) {
@@ -292,11 +275,12 @@
         g.textAlign = 'left'; g.fillStyle = COR.suave; g.font = `700 17px ${FONTE}`; g.fillText(`${i + 4}º`, cx.pos, m);
         g.fillStyle = '#fff'; ajustar(g, l.nome, 700, 19, 400); g.fillText(l.nome, cx.nome, m);
         g.textAlign = 'center'; g.font = `800 20px ${FONTE}`; g.fillText(String(l.desempenho), cx.des, m);
-        g.fillStyle = COR.suave; g.font = `600 17px ${FONTE}`; g.fillText(`${l.participacao}/${totalSemanais(mesSel)}`, cx.part, m);
+        g.fillStyle = COR.suave; g.font = `600 17px ${FONTE}`; g.fillText(`${l.participacao}/${total}`, cx.part, m);
         y += RH + RG;
       });
     }
 
+    btn.disabled = false;
     c.toBlob((blob) => {
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
@@ -306,31 +290,17 @@
     }, 'image/png');
   }
 
-  function avisarSeSemEstilo() {
-    if (getComputedStyle(document.documentElement).getPropertyValue('--preto').trim()) return;
-    const p = document.createElement('p');
-    p.setAttribute('style', 'background:#fff3c4;color:#000;padding:12px;margin:0;font:16px sans-serif');
-    p.textContent = 'O arquivo style.css não foi carregado. Confira se ele está na mesma pasta do index.html e do semanais.html, com esse nome exato (sem "(1)" no final).';
-    document.body.prepend(p);
-  }
-
   async function iniciar() {
-    avisarSeSemEstilo();
+    Util.avisarSeSemEstilo();
     try {
       [eventos, jogadores] = await Promise.all([json('data/eventos.json'), json('data/jogadores.json')]);
-      [logo, arte] = await Promise.all([imagem('assets/logo.png'), imagem('assets/banner.jpg')]);
     } catch (e) {
       const av = $('avisos'); av.hidden = false; av.textContent = e.message + ' Abra a página por um servidor (veja o README), não direto pelo arquivo.';
       return;
     }
     await carregarUltimosDecks();
-    const hoje = new Date();
-    const atual = `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, '0')}`;
-    // Só aparecem meses que têm semanal registrado.
-    const meses = [...new Set(eventos.map((e) => e.data.slice(0, 7)))].sort().reverse();
-    // Padrão: o mês atual; se ele ainda não tem semanal, o último mês que tem.
-    const comDados = eventos.map((e) => e.data.slice(0, 7)).filter((m) => m <= atual).sort();
-    mesSel = comDados.length ? comDados[comDados.length - 1] : (meses[0] || atual);
+    const meses = Util.mesesComDados(eventos);
+    mesSel = Util.mesPadrao(meses, Util.mesAtual());
     const sel = $('mes');
     meses.forEach((m) => {
       const o = document.createElement('option');

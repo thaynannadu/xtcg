@@ -15,6 +15,7 @@ docs/
   semanais.html, semanais.js      lista de cada semanal, com busca por jogador
   style.css                       estilo compartilhado
   calc.js                         cálculo (usado pela página e pelo Node)
+  util.js                         funções compartilhadas (meses, quintas-feiras, datas)
   assets/logo.png                 logo usado na página e na imagem exportada
   data/eventos.json               um item por semanal, jogadores na ordem da colocação
   data/jogadores.json             nome na tabela, apelidos e quem não pontua
@@ -23,7 +24,7 @@ docs/
   decks.js                        leitura do decks.txt e reconhecimento dos decks
 scripts/tabela.js                 imprime a tabela no terminal
 scripts/validar-dados.js          valida integridade dos dados
-tests/calc.test.js                testes automatizados do cálculo
+tests/*.test.js                    testes automatizados (cálculo, meses/quintas e decks)
 .github/workflows/validate.yml    validação automática em push e pull request
 ```
 
@@ -90,7 +91,7 @@ A página de semanais mostra o deck de cada jogador com os ícones dos Pokémon,
    Jogador 3: dragapult dusknoir
    ```
    Pode usar nome ou apelido do jogador (o do `jogadores.json`) e escrever o deck do seu jeito. A data aceita `2026-10-22` ou `22.10.26`. O separador pode ser `:`, ` - ` ou ` | `. Linhas com `//` no começo são comentários. Quem não for listado fica sem deck, e semanais sem nenhum deck não mostram a coluna.
-2. Rode `node scripts/conferir-decks.js` para ver o que o site entendeu. A própria página também mostra um aviso amarelo quando um nome não aparece no semanal ou quando um deck não é reconhecido.
+2. Rode `node scripts/conferir-decks.js` para ver o que o site entendeu. Para ver os avisos na própria página (nome que não aparece no semanal, deck não reconhecido), abra `semanais.html?avisos` ou `index.html?avisos`; os visitantes não veem esses avisos.
 3. Se um deck novo não for reconhecido, cadastre em `docs/data/decks.json`:
    ```json
    { "nome": "Charizard ex", "icones": ["charizard"], "palavras": ["charizard"] }
