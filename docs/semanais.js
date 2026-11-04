@@ -2,7 +2,7 @@
   const $ = (id) => document.getElementById(id);
   const MES_CURTO = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
   const MODO = document.body.dataset.modo === 'especiais' ? 'especiais' : 'semanais';
-  let todosEv = [], eventos = [], jogadores = [], linhasDe = new Map(), tudoAberto = false;
+  let tipoAtual = 'todos', todosEv = [], eventos = [], jogadores = [], linhasDe = new Map(), tudoAberto = false;
   let cfgDecks = { iconesBase: '', iconesExt: '.png' }, registro = [], decksPorData = new Map();
 
   const { nomeMes, plural, dataCurta, json, mesDe } = Util;
@@ -20,7 +20,7 @@
     const mes = $('mes').value;
     return eventos.slice().sort((a, b) => b.data.localeCompare(a.data))
       .filter((e) => mes === 'todos' || mesDe(e.data) === mes)
-      .filter((e) => !$('tipo') || $('tipo').value === 'todos' || XTCG.tipoDe(e) === $('tipo').value);
+      .filter((e) => MODO !== 'especiais' || tipoAtual === 'todos' || XTCG.tipoDe(e) === tipoAtual);
   }
 
   function cartao(e, aberto) {
@@ -81,7 +81,7 @@
     const ul = $('eventos'); ul.replaceChildren();
     itens.forEach((e, i) => ul.append(cartao(e, tudoAberto || i === 0)));
 
-    $('subtitulo').textContent = MODO === 'especiais' ? plural(itens.length, 'evento registrado', 'eventos registrados') : plural(itens.length, 'semanal registrado', 'semanais registrados');
+    $('subtitulo').textContent = MODO === 'especiais' ? `${plural(itens.length, 'evento registrado', 'eventos registrados')} · não pontuam no Ginásio` : plural(itens.length, 'semanal registrado', 'semanais registrados');
     const vazio = $('vazio');
     vazio.hidden = itens.length > 0;
     if (!itens.length) vazio.textContent = MODO === 'especiais' && !todosEv.some((e) => !XTCG.ehSemanal(e)) ? 'Ainda não há eventos especiais, cups ou challenges registrados.' : `Nenhum ${MODO === 'especiais' ? 'evento' : 'semanal'} em ${mes === 'todos' ? 'nenhum mês' : nomeMes(mes)}. Escolha outro filtro na lista acima.`;
@@ -162,12 +162,11 @@
     const todos = el('option', null, 'Todos os meses'); todos.value = 'todos'; sel.append(todos);
     sel.value = meses.length ? Util.mesPadrao(meses, Util.mesAtual()) : 'todos';
 
-    const tipoSel = $('tipo');
-    if (tipoSel) {
-      const presentes = [...new Set(eventos.map(XTCG.tipoDe))];
-      Object.keys(XTCG.TIPOS).filter((t) => presentes.includes(t)).forEach((t) => { const o = el('option', null, XTCG.TIPOS[t]); o.value = t; tipoSel.append(o); });
-      tipoSel.addEventListener('change', render);
-    }
+    document.querySelectorAll('.subnav [data-tipo]').forEach((b) => b.addEventListener('click', () => {
+      tipoAtual = b.dataset.tipo;
+      document.querySelectorAll('.subnav [data-tipo]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      render();
+    }));
     sel.addEventListener('change', render);
     $('alternar').addEventListener('click', () => {
       tudoAberto = !tudoAberto;
