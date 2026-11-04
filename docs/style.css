@@ -1,10 +1,11 @@
 :root {
   /* Design system XTCG */
-  --preto: #070707;
+  --preto: #010101;
   --branco: #fff;
   --grafite: #1d1d1d;
   --chumbo: #1a1a1a;
-  --cinza: #363636;
+  --cinza: #242424;
+  --cinza-fundo: #080808;
   --coral: #e8513f;
   --amarelo: #efd456;
   --marinho: #08163b;
@@ -19,11 +20,17 @@
 
   font-family: Figtree, "Helvetica Neue", Arial, sans-serif;
   color: var(--branco);
-  background: var(--grafite);
+  background: var(--preto);
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
-body { margin: 0; min-height: 100vh; }
+
+/* Fundo: preto → cinza → preto, na horizontal */
+body {
+  margin: 0; min-height: 100vh;
+  background: url("assets/noise.png"), linear-gradient(90deg, var(--preto), var(--cinza-fundo), var(--preto));
+  background-size: 100px, auto;
+}
 button, select { font: inherit; }
 
 /* Banner */
@@ -31,12 +38,11 @@ button, select { font: inherit; }
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  width: min(1080px, 100% - 32px);
+  width: 100%;
   min-height: 300px;
-  margin: 20px auto 0;
+  margin: 0;
   display: flex;
   align-items: flex-end;
-  border-radius: 28px;
   background: linear-gradient(105deg, var(--preto) 42%, var(--marinho));
 }
 .hero::before {
@@ -45,7 +51,7 @@ button, select { font: inherit; }
   inset: 0 0 0 auto;
   width: 60%;
   z-index: -1;
-  background: url("assets/banner.jpg") center 20% / cover;
+  background: url("assets/banner-tcg.jpg") right center / cover;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 62%);
   mask-image: linear-gradient(90deg, transparent, #000 62%);
 }
@@ -56,15 +62,20 @@ button, select { font: inherit; }
   height: 6px;
   background: linear-gradient(90deg, var(--coral) 0 25%, var(--amarelo) 25% 50%, var(--azul) 50% 75%, var(--roxo) 75%);
 }
-.hero-texto { padding: 36px 36px 40px; }
+.hero-texto { width: min(1080px, 100% - 32px); margin: 0 auto; padding: 36px 0 40px; }
 .hero-logo { display: block; width: 230px; height: auto; margin-bottom: 28px; }
 h1 { margin: 0; font-size: clamp(1.9rem, 4.6vw, 3rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.01em; }
 .sub { margin: 8px 0 0; font-size: 1.05rem; color: var(--texto-suave); }
 
 main { width: min(1080px, 100% - 32px); margin: 0 auto; padding: 24px 0 72px; }
 
-/* Botões */
-.barra { display: flex; gap: 16px; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; }
+/* Painel único: navegação + seletor de mês + ação */
+.painel {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px;
+  margin-bottom: 24px; padding: 10px; border-radius: 20px;
+  background: rgba(7, 7, 7, .72); box-shadow: inset 0 0 0 1px var(--cinza);
+}
+.barra { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 /* Seletor de mês */
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .seletor { position: relative; display: inline-block; }
@@ -94,39 +105,35 @@ main { width: min(1080px, 100% - 32px); margin: 0 auto; padding: 24px 0 72px; }
 .avisos { background: var(--preto); border: 1px solid var(--amarelo); border-radius: 16px; padding: 12px 18px; margin-bottom: 24px; font-size: .95rem; color: var(--amarelo); }
 .avisos p { margin: 4px 0; }
 
-/* Top 3: alturas 100% / 90% / 80%, tudo alinhado embaixo */
-.podio { --alt: 270px; list-style: none; margin: 0 0 16px; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; align-items: end; }
+/* Top 3: cards do mesmo tamanho, tudo alinhado embaixo */
+.podio {list-style: none; margin: 0 0 16px; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; align-items: end; }
 .podio:empty { display: none; }
 .card {
   position: relative; cursor: pointer;
-  display: grid; grid-template-columns: 1fr auto; grid-template-rows: 1fr auto auto auto auto;
+  display: grid; grid-template-columns: 1fr auto; grid-template-rows: 1fr minmax(2.5rem, auto) auto auto auto;
   grid-template-areas: ". ." "pos deck" "nome nome" "pts part" "det det";
   column-gap: 16px; align-items: end;
   padding: 18px 22px 20px;
   border: 3px solid transparent; border-radius: 12px;
   background: linear-gradient(var(--preto), var(--preto)) padding-box, var(--grad) border-box;
 }
-.card.p1 { --grad: var(--g-ouro); min-height: var(--alt); box-shadow: 0 0 48px rgba(239, 212, 86, .16); }
-.card.p2 { --grad: var(--g-prata); min-height: calc(var(--alt) * .9); }
-.card.p3 { --grad: var(--g-bronze); min-height: calc(var(--alt) * .8); }
+.card.p1 { --grad: var(--g-ouro); box-shadow: 0 0 48px rgba(239, 212, 86, .16); }
+.card.p2 { --grad: var(--g-prata); }
+.card.p3 { --grad: var(--g-bronze); }
 .card .pos {
-  grid-area: pos; font-size: 1.9rem; font-weight: 800; line-height: 1;
+  grid-area: pos; font-size: 2.8rem; font-weight: 800; line-height: 1;
   background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent;
 }
-.card.p1 .pos { font-size: 2.2rem; }
 .deck-podio { grid-area: deck; justify-self: end; display: inline-flex; align-items: center; justify-content: flex-end; max-width: 100%; }
 .deck-podio img { width: 40px; height: 40px; object-fit: contain; margin: -2px 0; }
 .deck-podio img + img { margin-left: -6px; }
 .card h3 { grid-area: nome; margin: 14px 0 6px; font-size: 1.5rem; font-weight: 800; line-height: 1.15; letter-spacing: -.01em; text-align: left; }
-.card.p1 h3 { font-size: 1.7rem; }
 .card h3 button { all: unset; cursor: pointer; border-radius: 8px; }
 .card h3 button:focus-visible { outline: 3px solid var(--amarelo); outline-offset: 3px; }
 .card .pts { grid-area: pts; margin: 0; display: flex; align-items: baseline; gap: 6px; font-size: 1.1rem; color: var(--texto-suave); }
 .card .pts strong { font-size: 3.1rem; font-weight: 800; line-height: 1; color: var(--branco); }
-.card.p1 .pts strong { font-size: 3.6rem; }
-/* o número do 1º é maior; o respiro nos outros mantém os nomes na mesma altura */
-.card.p2 .pts, .card.p3 .pts { padding-top: .5rem; }
 .card .part { grid-area: part; justify-self: end; margin: 0; font-size: 1.1rem; font-weight: 300; line-height: 1; color: var(--branco); }
+th.c-num { width: 10%; }
 tbody tr.linha { cursor: pointer; }
 tbody tr.linha:hover { filter: brightness(1.15); }
 
@@ -140,7 +147,7 @@ tbody tr.linha:hover { filter: brightness(1.15); }
 
 /* Demais posições */
 .rolagem { overflow-x: auto; }
-table { width: 100%; min-width: 560px; border-collapse: separate; border-spacing: 0 4px; }
+table { width: 100%; min-width: 560px; border-collapse: separate; border-spacing: 1px 2px; }
 th { padding: 4px 16px; font-size: .85rem; font-weight: 600; color: var(--texto-suave); text-align: center; }
 td { padding: 9px 16px; text-align: center; font-weight: 600; }
 th.esq, td.nome { text-align: left; }
@@ -165,12 +172,25 @@ code { background: var(--preto); padding: 2px 6px; border-radius: 6px; }
 @media (max-width: 760px) {
   .hero { min-height: 260px; }
   .hero::before { width: 100%; opacity: .4; }
-  .hero-texto { padding: 28px 24px 32px; }
+  .hero-texto { padding: 28px 0 32px; }
+  .painel { border-radius: 16px; }
+  .barra { width: 100%; }
   .hero-logo { width: 190px; margin-bottom: 20px; }
-  .podio { grid-template-columns: 1fr; align-items: stretch; }
-  .card.p1, .card.p2, .card.p3 { min-height: 0; }
-  .card .pts strong, .card.p1 .pts strong { font-size: 2.8rem; }
-  .card.p2 .pts, .card.p3 .pts { padding-top: 0; }
+  /* Pódio no mobile: 1 linha por card → [pos nome … deck] / [pts … part] */
+  .podio { grid-template-columns: 1fr; align-items: stretch; gap: 10px; }
+  .card {
+    min-height: 0; padding: 14px 18px 16px; column-gap: 12px; row-gap: 6px;
+    grid-template-columns: auto minmax(0, 1fr) auto; grid-template-rows: auto auto auto;
+    grid-template-areas: "pos nome deck" "pts pts part" "det det det"; align-items: center;
+  }
+  .card .pos { font-size: 2rem; }
+  .card h3 { margin: 0; font-size: 1.5rem; min-width: 0; overflow: hidden; }
+  .card h3 button { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .deck-podio img { width: 36px; height: 36px; }
+  .card .pts { align-self: end; }
+  .card .pts strong { font-size: 2.2rem; }
+  .card .part { align-self: end; }
+  th.c-num { width: auto; }
   table { min-width: 0; }
   th { padding: 4px 6px; font-size: .75rem; }
   td { padding: 9px 6px; }
@@ -182,10 +202,10 @@ code { background: var(--preto); padding: 2px 6px; border-radius: 6px; }
 }
 
 /* Navegação entre páginas */
-.nav { display: flex; gap: 8px; margin: 0 0 20px; flex-wrap: wrap; }
+.nav { display: flex; gap: 8px; margin: 0; flex-wrap: wrap; }
 .nav a {
   padding: 9px 20px; border-radius: 999px; font-weight: 700; text-decoration: none; color: var(--branco);
-  background: var(--preto); box-shadow: inset 0 0 0 1px var(--cinza);
+  background: var(--chumbo); box-shadow: inset 0 0 0 1px var(--cinza);
 }
 .nav a:hover { background: var(--chumbo); }
 .nav a[aria-current="page"] { background: var(--g-prata); box-shadow: none; }

@@ -5,10 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
   <title>Líder de Ginásio · XTCG Card Shop</title>
+  <meta name="theme-color" content="#070707">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=19">
+  <link rel="stylesheet" href="style.css?v=26">
 </head>
 <body>
   <header class="hero">
@@ -20,16 +25,18 @@
   </header>
 
   <main>
-    <nav class="nav" aria-label="Páginas">
-      <a href="index.html" aria-current="page">Classificação</a>
-      <a href="semanais.html">Semanais</a>
-    </nav>
-    <div class="barra">
-      <label class="seletor">
-        <span class="sr">Mês</span>
-        <select id="mes"></select>
-      </label>
-      <button id="baixar" class="btn btn-grad" type="button">Baixar imagem</button>
+    <div class="painel">
+      <nav class="nav" aria-label="Páginas">
+        <a href="index.html" aria-current="page">Classificação</a>
+        <a href="semanais.html">Semanais</a>
+      </nav>
+      <div class="barra">
+        <label class="seletor">
+          <span class="sr">Mês</span>
+          <select id="mes"></select>
+        </label>
+        <button id="baixar" class="btn btn-grad" type="button">Baixar imagem</button>
+      </div>
     </div>
 
     <div id="avisos" class="avisos" hidden></div>
@@ -40,10 +47,10 @@
       <table id="tabela">
         <thead>
           <tr>
-            <th scope="col">Posição</th>
+            <th scope="col" class="c-num">Posição</th>
             <th scope="col" class="esq">Nome</th>
-            <th scope="col">Pontos</th>
-            <th scope="col">Participações</th>
+            <th scope="col" class="c-num">Pontos</th>
+            <th scope="col" class="c-num">Participações</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -67,9 +74,9 @@
     </ul>
   </footer>
 
-  <script src="util.js?v=19"></script>
-  <script src="calc.js?v=19"></script>
-  <script src="decks.js?v=19"></script>
-  <script src="app.js?v=19"></script>
+  <script src="util.js?v=26"></script>
+  <script src="calc.js?v=26"></script>
+  <script src="decks.js?v=26"></script>
+  <script src="app.js?v=26"></script>
 </body>
 </html>

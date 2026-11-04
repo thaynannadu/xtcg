@@ -186,11 +186,15 @@
     g.fillStyle = degrade(g, x, y, x + w, y + h * 0.4, [COR.preto, COR.marinho]);
     g.fillRect(x, y, w, h);
 
-    const aw = Math.round(w * 0.6), esc = aw / arte.naturalWidth, ah = arte.naturalHeight * esc;
+    const aw = Math.round(w * 0.6);
     const off = document.createElement('canvas');
     off.width = aw * 2; off.height = h * 2;
     const o = off.getContext('2d'); o.scale(2, 2);
-    o.drawImage(arte, 0, -(ah - h) * 0.2, aw, ah);
+    // recorte "cover" ancorado à direita, como no site
+    const nw = arte.naturalWidth, nh = arte.naturalHeight, ta = aw / h;
+    let sw = nw, sh = nw / ta, sx = 0, sy = 0;
+    if (nw / nh > ta) { sh = nh; sw = nh * ta; sx = nw - sw; } else { sy = (nh - sh) / 2; }
+    o.drawImage(arte, sx, sy, sw, sh, 0, 0, aw, h);
     o.globalCompositeOperation = 'destination-in';
     const m = o.createLinearGradient(0, 0, aw, 0);
     m.addColorStop(0, 'rgba(0,0,0,0)'); m.addColorStop(0.62, 'rgba(0,0,0,1)');
@@ -208,14 +212,14 @@
     g.restore();
   }
 
-  const CARD_H = 224, K1 = 1.1, ALTURA = { 1: 1, 2: 0.9, 3: 0.8 };
+  const CARD_H = 246;
 
   function desenharCard(g, l, lugar, x, yBase, cw, total) {
-    const k = lugar === 1 ? K1 : 1, ch = CARD_H * K1 * ALTURA[lugar], y = yBase - ch;
+    const ch = CARD_H, y = yBase - ch;
     const [c1, c2] = GRAD[lugar];
     g.save();
-    g.translate(x, y); g.scale(k, k);
-    const w = cw / k, h = ch / k;
+    g.translate(x, y);
+    const w = cw, h = ch;
     if (lugar === 1) { g.shadowColor = 'rgba(239,212,86,.28)'; g.shadowBlur = 30; }
     caixa(g, 0, 0, w, h, 12); g.fillStyle = COR.preto; g.fill();
     g.shadowBlur = 0; g.shadowColor = 'transparent';
@@ -237,14 +241,14 @@
 
   async function baixar() {
     const btn = $('baixar'); btn.disabled = true;
-    try { [logo, arte] = logo && arte ? [logo, arte] : await Promise.all([imagem('assets/logo.png'), imagem('assets/banner.jpg')]); }
+    try { [logo, arte] = logo && arte ? [logo, arte] : await Promise.all([imagem('assets/logo.png'), imagem('assets/banner-tcg.jpg')]); }
     catch (e) { btn.disabled = false; alert(e.message); return; }
     try { await Promise.all([document.fonts.load(`800 40px Figtree`), document.fonts.load(`500 20px Figtree`), document.fonts.load(`300 20px Figtree`)]); } catch (e) { /* segue com a fonte reserva */ }
     const r = resultado(), total = totalDoMes();
     const top = r.tabela.slice(0, 3), resto = r.tabela.slice(3);
     const W = 1080, S = 2, M = 40, IN = W - 2 * M, BH = 300, GAP = 20, CW = (IN - 2 * GAP) / 3;
     const RH = 38, RG = 4, HH = 28;
-    const podioH = top.length ? CARD_H * K1 : 0;
+    const podioH = top.length ? CARD_H : 0;
     const H = M + BH + (top.length ? 20 + podioH : 0) + (resto.length ? 20 + HH + resto.length * (RH + RG) : 0) + M;
 
     const c = document.createElement('canvas');
