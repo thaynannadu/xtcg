@@ -243,7 +243,7 @@
 
     g.textAlign = 'left'; g.textBaseline = 'top';
     g.font = `800 38px ${FONTE}`; g.fillStyle = degrade(g, 20, 0, 20 + 56, 48, [c1, c2]); g.fillText(`${lugar}º`, 20, 14);
-    g.fillStyle = '#fff'; ajustar(g, l.nome, 800, 25, w - 40); g.fillText(l.nome, 20, 66);
+    g.fillStyle = '#fff'; ajustar(g, l.nome, 800, 25, w - 40); g.textBaseline = 'alphabetic'; g.fillText(l.nome, 20, h - 26 - 62); g.textBaseline = 'top';
     g.textBaseline = 'alphabetic';
     g.font = `800 62px ${FONTE}`; g.fillStyle = '#fff'; g.fillText(String(l.desempenho), 20, h - 26);
     const larg = g.measureText(String(l.desempenho)).width;

@@ -316,3 +316,11 @@ tr.detalhe td { padding: 14px 22px; }
 
 .card h3 { margin: 16px 0 16px; }
 .card { padding: 18px 22px 20px; }
+
+/* Conteúdo alinhado embaixo: posição no topo, nome e pontos colados na base */
+.card { grid-template-rows: auto 1fr auto auto; grid-template-areas: "pos deck" ". ." "nome nome" "pts part"; }
+.card h3 { margin: 16px 0 6px; }
+
+/* Detalhes abertos ficam sempre abaixo de pontos/participações */
+.card { grid-template-rows: auto 1fr auto auto auto; grid-template-areas: "pos deck" ". ." "nome nome" "pts part" "det det"; }
+.card .det { grid-area: det; }
