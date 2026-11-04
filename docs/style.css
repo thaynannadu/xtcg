@@ -102,7 +102,7 @@ main { width: min(1080px, 100% - 32px); margin: 0 auto; padding: 24px 0 72px; }
   display: grid; gap: 4px; align-content: start;
   padding: 14px 18px 16px;
   border: 3px solid transparent;
-  border-radius: 24px;
+  border-radius: 12px;
   background: linear-gradient(var(--preto), var(--preto)) padding-box, var(--grad) border-box;
 }
 .card.p1 { --grad: var(--g-ouro); padding-top: 18px; padding-bottom: 20px; box-shadow: 0 0 48px rgba(239, 212, 86, .16); }
@@ -294,3 +294,25 @@ tr.detalhe td { padding: 14px 22px; }
 .card .det { grid-column: 1 / -1; }
 .deck-podio img { width: 40px; height: 40px; margin: -2px 0; }
 .deck-podio img + img { margin-left: -6px; }
+
+/* Cartão: "62 pts" e "5p" */
+.card .pts { display: flex; align-items: baseline; gap: 6px; font-size: 1.1rem; }
+.card .pts strong, .card.p1 .pts strong { display: inline; }
+.card .part { font-size: 1.6rem; font-weight: 800; color: var(--branco); line-height: 1; }
+
+/* Pódio: alturas 100% / 90% / 80%, número maior, cantos de 12px */
+.card { border-radius: 12px; grid-template-rows: auto auto 1fr; }
+.podio { --alt: 270px; align-items: end; }
+.card.p1 { min-height: var(--alt); }
+.card.p2 { min-height: calc(var(--alt) * .9); }
+.card.p3 { min-height: calc(var(--alt) * .8); }
+.card .pts strong { font-size: 3.1rem; }
+.card.p1 .pts strong { font-size: 3.6rem; }
+.card .part { font-size: 1.7rem; }
+@media (max-width: 640px) {
+  .card.p1, .card.p2, .card.p3 { min-height: 0; }
+  .card .pts strong, .card.p1 .pts strong { font-size: 2.8rem; }
+}
+
+.card h3 { margin: 16px 0 16px; }
+.card { padding: 18px 22px 20px; }

@@ -11,6 +11,15 @@
   };
   const dataCurta = (iso) => iso.slice(8, 10) + '.' + iso.slice(5, 7);
   const dataBarra = (iso) => iso.slice(8, 10) + '/' + iso.slice(5, 7);
+  // Quintas-feiras do mês: é o total de semanais esperado desde o início do mês.
+  function quintasDoMes(ym) {
+    const [a, m] = ym.split('-').map(Number);
+    const dias = new Date(a, m, 0).getDate();
+    let n = 0;
+    for (let d = 1; d <= dias; d++) if (new Date(a, m - 1, d).getDay() === 4) n++;
+    return n;
+  }
+  const totalSemanais = (ym) => Math.max(quintasDoMes(ym), eventos.filter((e) => e.data.startsWith(ym)).length);
   const plural = (n, um, varios) => `${n} ${n === 1 ? um : varios}`;
 
   async function json(url) {
@@ -93,9 +102,10 @@
       const dk = iconesDoDeck(l.nome);
       const pts = document.createElement('p'); pts.className = 'pts';
       const forte = document.createElement('strong'); forte.textContent = l.desempenho;
-      pts.append(forte, 'pontos de desempenho');
+      pts.append(forte, ' pts');
       const part = document.createElement('p'); part.className = 'part';
-      part.textContent = plural(l.participacao, 'participação', 'participações');
+      const tot = totalSemanais(mesSel);
+      part.textContent = `${l.participacao}/${tot}`; part.title = `${plural(l.participacao, 'participação', 'participações')} em ${plural(tot, 'semanal', 'semanais')}`;
       li.append(pos, ...(dk ? [dk] : []), h, pts, part);
 
       let det = null;
@@ -122,7 +132,7 @@
       b.type = 'button'; b.textContent = l.nome; b.setAttribute('aria-expanded', 'false');
       nome.append(b);
       const d = document.createElement('td'); d.className = 'des'; d.textContent = l.desempenho;
-      const p = document.createElement('td'); p.textContent = l.participacao;
+      const p = document.createElement('td'); p.textContent = `${l.participacao}/${totalSemanais(mesSel)}`;
       tr.append(pos, nome, d, p);
       corpo.append(tr);
 
@@ -218,26 +228,30 @@
     g.restore();
   }
 
-  const CARD_H = 188, K1 = 1.1;
+  const CARD_H = 224, K1 = 1.1, ALTURA = { 1: 1, 2: 0.9, 3: 0.8 };
 
   function desenharCard(g, l, lugar, x, yBase, cw) {
-    const k = lugar === 1 ? K1 : 1, ch = CARD_H * k, y = yBase - ch;
+    const k = lugar === 1 ? K1 : 1, ch = CARD_H * K1 * ALTURA[lugar], y = yBase - ch;
     const [c1, c2] = GRAD[lugar];
     g.save();
     g.translate(x, y); g.scale(k, k);
-    const w = cw / k, h = CARD_H;
+    const w = cw / k, h = ch / k;
     if (lugar === 1) { g.shadowColor = 'rgba(239,212,86,.28)'; g.shadowBlur = 30; }
-    caixa(g, 0, 0, w, h, 22); g.fillStyle = COR.preto; g.fill();
+    caixa(g, 0, 0, w, h, 12); g.fillStyle = COR.preto; g.fill();
     g.shadowBlur = 0; g.shadowColor = 'transparent';
-    caixa(g, 1.5, 1.5, w - 3, h - 3, 21); g.lineWidth = 3; g.strokeStyle = degrade(g, 0, 0, w, h, [c1, c2]); g.stroke();
+    caixa(g, 1.5, 1.5, w - 3, h - 3, 11); g.lineWidth = 3; g.strokeStyle = degrade(g, 0, 0, w, h, [c1, c2]); g.stroke();
 
     g.textAlign = 'left'; g.textBaseline = 'top';
     g.font = `800 38px ${FONTE}`; g.fillStyle = degrade(g, 20, 0, 20 + 56, 48, [c1, c2]); g.fillText(`${lugar}º`, 20, 14);
-    g.fillStyle = '#fff'; ajustar(g, l.nome, 800, 23, w - 40); g.fillText(l.nome, 20, 62);
-    g.font = `800 50px ${FONTE}`; g.fillText(String(l.desempenho), 20, 90);
-    g.font = `500 14px ${FONTE}`; g.fillStyle = COR.suave;
-    g.fillText('pontos de desempenho', 20, 148);
-    g.fillText(plural(l.participacao, 'participação', 'participações'), 20, 166);
+    g.fillStyle = '#fff'; ajustar(g, l.nome, 800, 25, w - 40); g.fillText(l.nome, 20, 66);
+    g.textBaseline = 'alphabetic';
+    g.font = `800 62px ${FONTE}`; g.fillStyle = '#fff'; g.fillText(String(l.desempenho), 20, h - 26);
+    const larg = g.measureText(String(l.desempenho)).width;
+    g.font = `500 20px ${FONTE}`; g.fillStyle = COR.suave;
+    g.fillText('pts', 20 + larg + 8, h - 26);
+    g.font = `800 26px ${FONTE}`; g.fillStyle = '#fff'; g.textAlign = 'right';
+    g.fillText(`${l.participacao}/${totalSemanais(mesSel)}`, w - 20, h - 26);
+    g.textAlign = 'left'; g.textBaseline = 'top';
     g.restore();
   }
 
@@ -270,7 +284,7 @@
       g.textBaseline = 'middle'; g.fillStyle = COR.suave; g.font = `600 14px ${FONTE}`;
       const cx = { pos: M + 32, nome: M + 120, des: M + 660, part: M + 890 };
       g.textAlign = 'left'; g.fillText('Posição', cx.pos, y + HH / 2); g.fillText('Nome', cx.nome, y + HH / 2);
-      g.textAlign = 'center'; g.fillText('Pontos de desempenho', cx.des, y + HH / 2); g.fillText('Pontos de participação', cx.part, y + HH / 2);
+      g.textAlign = 'center'; g.fillText('Pontos', cx.des, y + HH / 2); g.fillText('Participações', cx.part, y + HH / 2);
       y += HH;
       resto.forEach((l, i) => {
         caixa(g, M, y, IN, RH, 12); g.fillStyle = i % 2 ? COR.chumbo : COR.preto; g.fill();
@@ -278,7 +292,7 @@
         g.textAlign = 'left'; g.fillStyle = COR.suave; g.font = `700 17px ${FONTE}`; g.fillText(`${i + 4}º`, cx.pos, m);
         g.fillStyle = '#fff'; ajustar(g, l.nome, 700, 19, 400); g.fillText(l.nome, cx.nome, m);
         g.textAlign = 'center'; g.font = `800 20px ${FONTE}`; g.fillText(String(l.desempenho), cx.des, m);
-        g.fillStyle = COR.suave; g.font = `600 17px ${FONTE}`; g.fillText(String(l.participacao), cx.part, m);
+        g.fillStyle = COR.suave; g.font = `600 17px ${FONTE}`; g.fillText(`${l.participacao}/${totalSemanais(mesSel)}`, cx.part, m);
         y += RH + RG;
       });
     }
@@ -312,11 +326,11 @@
     await carregarUltimosDecks();
     const hoje = new Date();
     const atual = `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, '0')}`;
-    // O mês atual sempre está na lista e começa selecionado, mesmo sem semanal registrado ainda.
-    const meses = [...new Set([...eventos.map((e) => e.data.slice(0, 7)), atual])].sort().reverse();
-    // Mês atual é o padrão; se ainda não tem semanal, abre o último mês com classificação.
+    // Só aparecem meses que têm semanal registrado.
+    const meses = [...new Set(eventos.map((e) => e.data.slice(0, 7)))].sort().reverse();
+    // Padrão: o mês atual; se ele ainda não tem semanal, o último mês que tem.
     const comDados = eventos.map((e) => e.data.slice(0, 7)).filter((m) => m <= atual).sort();
-    mesSel = comDados.includes(atual) || !comDados.length ? atual : comDados[comDados.length - 1];
+    mesSel = comDados.length ? comDados[comDados.length - 1] : (meses[0] || atual);
     const sel = $('mes');
     meses.forEach((m) => {
       const o = document.createElement('option');
