@@ -146,7 +146,7 @@ tbody tr.linha:hover { filter: brightness(1.15); }
 .det-pts { margin-left: auto; padding-left: 16px; font-weight: 800; color: var(--branco); }
 
 /* Demais posições */
-.rolagem { overflow-x: auto; }
+.rolagem { overflow-x: auto; position: relative; }
 table { width: 100%; min-width: 560px; border-collapse: separate; border-spacing: 1px 2px; }
 th { padding: 4px 16px; font-size: .85rem; font-weight: 600; color: var(--texto-suave); text-align: center; }
 td { padding: 9px 16px; text-align: center; font-weight: 600; }
@@ -290,3 +290,117 @@ td.deck-cel { text-align: left; }
 .rodape h2 { margin: 0 0 8px; font-size: 1rem; font-weight: 700; color: var(--branco); }
 .rodape ul { margin: 0; padding-left: 20px; }
 
+
+/* ---------- Administração ---------- */
+.hero-admin { min-height: 220px; }
+.admin-card { margin-bottom: 20px; padding: 20px; border-radius: 20px; background: rgba(7, 7, 7, .72); box-shadow: inset 0 0 0 1px var(--cinza); }
+.admin-card h2 { margin: 0 0 8px; font-size: 1.2rem; font-weight: 800; }
+.admin-card h3 { margin: 0; font-size: 1.05rem; font-weight: 800; }
+.dica { margin: 0 0 12px; font-size: .9rem; line-height: 1.5; color: var(--texto-suave); }
+.conectado { font-size: .9rem; font-weight: 600; color: var(--texto-suave); }
+.btn-sec { background: var(--chumbo); box-shadow: inset 0 0 0 1px var(--cinza); }
+.btn-sec:hover { background: var(--grafite); }
+.btn-perigo { background: transparent; box-shadow: inset 0 0 0 2px var(--coral); color: var(--coral); }
+.btn-perigo:hover { background: rgba(232, 81, 63, .12); }
+.btn-mini { padding: 6px 14px; font-size: .85rem; }
+
+.aviso-admin { margin-bottom: 20px; padding: 12px 18px; border-radius: 16px; font-size: .95rem; background: var(--chumbo); box-shadow: inset 0 0 0 1px var(--cinza); }
+.aviso-admin.erro { color: #ffb4a9; box-shadow: inset 0 0 0 1px var(--coral); }
+.aviso-admin.ok { color: #b7f0c1; box-shadow: inset 0 0 0 1px #3fae5a; }
+
+.grade-campos { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; align-items: end; }
+.grade-campos .largo { grid-column: 1 / -1; }
+.campo { display: grid; gap: 6px; font-size: .85rem; font-weight: 600; color: var(--texto-suave); }
+.campo small { font-weight: 400; }
+.campo.cresce { flex: 1 1 260px; }
+.admin-card input, .admin-card select, .admin-card textarea {
+  width: 100%; padding: 10px 12px; border: 0; border-radius: 12px; font: inherit; font-weight: 600; color: var(--branco);
+  background: var(--preto); box-shadow: inset 0 0 0 1px var(--cinza);
+}
+.admin-card input[type="checkbox"] { width: auto; box-shadow: none; }
+.admin-card input::placeholder, .admin-card textarea::placeholder { color: #666; font-weight: 400; }
+.admin-card textarea { resize: vertical; font-weight: 400; font-family: ui-monospace, Consolas, monospace; font-size: .9rem; margin-bottom: 10px; }
+.admin-card input:focus-visible, .admin-card select:focus-visible, .admin-card textarea:focus-visible { outline: 2px solid var(--amarelo); outline-offset: 1px; }
+.marcar { display: flex; align-items: center; gap: 8px; font-size: .88rem; color: var(--texto-suave); cursor: pointer; }
+
+.abas { display: flex; gap: 8px; margin-bottom: 16px; }
+.abas button { padding: 9px 22px; border: 0; border-radius: 999px; font-weight: 700; color: var(--branco); cursor: pointer; background: var(--chumbo); box-shadow: inset 0 0 0 1px var(--cinza); }
+.abas button[aria-selected="true"] { background: var(--g-prata); box-shadow: none; }
+
+.linha-topo { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 16px; align-items: end; }
+.linha-topo .campo:first-child { flex: 1 1 280px; }
+.colar { margin-bottom: 16px; }
+.colar summary, .previa summary { cursor: pointer; font-weight: 700; margin-bottom: 10px; }
+
+table.adm { min-width: 760px; margin-bottom: 12px; border-spacing: 0 6px; }
+table.adm td { padding: 0 4px; text-align: left; font-weight: 400; }
+table.adm .pos-adm { width: 2.2em; text-align: center; font-weight: 800; color: var(--texto-suave); }
+table.adm .c-n { width: 64px; }
+table.adm .c-n input, table.adm .c-ow input { text-align: center; padding-inline: 4px; }
+table.adm .c-ow { width: 96px; }
+table.adm .c-nome { min-width: 190px; }
+table.adm .c-deck { min-width: 230px; }
+table.adm .c-deck input { margin-bottom: 4px; }
+table.adm .pts-adm { width: 90px; text-align: center; font-weight: 800; white-space: nowrap; }
+table.adm .acoes-linha { white-space: nowrap; text-align: right; }
+.deck-adm { display: block; min-height: 0; }
+.deck-adm .icones img { width: 26px; height: 26px; }
+.nao-reconhecido { font-size: .75rem; color: var(--amarelo); }
+.icone-btn { width: 32px; height: 32px; margin-left: 4px; border: 0; border-radius: 10px; cursor: pointer; color: var(--branco); background: var(--chumbo); box-shadow: inset 0 0 0 1px var(--cinza); }
+.icone-btn:hover:not(:disabled) { background: var(--grafite); }
+.icone-btn:disabled { opacity: .3; cursor: default; }
+
+.problemas, .novos { margin: 16px 0; padding: 12px 16px; border-radius: 14px; background: var(--chumbo); font-size: .9rem; }
+.problemas p { margin: 4px 0; }
+.problemas .erro { color: #ffb4a9; }
+.problemas .aviso { color: var(--amarelo); }
+.novos .marcar { padding: 3px 0; }
+.previa { margin: 16px 0; }
+.previa ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.previa li { display: grid; grid-template-columns: 2.5em 1fr auto auto; gap: 12px; padding: 8px 14px; border-radius: 12px; background: var(--preto); box-shadow: inset 0 0 0 1px var(--chumbo); align-items: baseline; }
+.previa .p-pos { color: var(--texto-suave); font-weight: 800; }
+.previa .p-nome { font-weight: 700; }
+.previa .p-pts { font-weight: 800; }
+.previa .p-part { min-width: 3em; text-align: right; color: var(--texto-suave); }
+.acoes { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
+
+#tab-decks .icones { margin-right: 10px; vertical-align: middle; }
+#tab-decks .nome-deck { font-weight: 700; vertical-align: middle; }
+#tab-decks td.esq { text-align: left; }
+#form-deck { margin: 20px 0 8px; padding-top: 20px; border-top: 1px solid var(--cinza); }
+.previa-icones { display: flex; min-height: 36px; align-items: center; gap: 6px; }
+.previa-icones img { width: 36px; height: 36px; object-fit: contain; }
+
+@media (max-width: 760px) {
+  .admin-card { padding: 16px 14px; border-radius: 16px; }
+  .abas button { flex: 1; }
+  .previa li { grid-template-columns: 2em 1fr auto; }
+  .previa .p-part { display: none; }
+
+  /* Tabela de jogadores vira uma ficha por jogador */
+  table.adm { min-width: 0; }
+  table.adm thead { display: none; }
+  table.adm, table.adm tbody { display: block; }
+  #tab-linhas tbody tr {
+    display: grid; grid-template-columns: 1.6em repeat(4, minmax(0, 1fr)) auto; gap: 8px 6px; align-items: center;
+    margin-bottom: 10px; padding: 12px 10px; border-radius: 14px; background: var(--preto); box-shadow: inset 0 0 0 1px var(--chumbo);
+  }
+  #tab-linhas td { padding: 0; min-width: 0; width: auto; }
+  #tab-linhas td:nth-child(1) { grid-area: 1 / 1; }
+  #tab-linhas td:nth-child(2) { grid-area: 1 / 2 / 2 / 6; }
+  #tab-linhas td:nth-child(9) { grid-area: 1 / 6; }
+  #tab-linhas td:nth-child(3) { grid-area: 2 / 2; }
+  #tab-linhas td:nth-child(4) { grid-area: 2 / 3; }
+  #tab-linhas td:nth-child(5) { grid-area: 2 / 4; }
+  #tab-linhas td:nth-child(6) { grid-area: 2 / 5 / 3 / 7; }
+  #tab-linhas td:nth-child(7) { grid-area: 3 / 2 / 4 / 6; }
+  #tab-linhas td:nth-child(8) { grid-area: 3 / 6; text-align: right; }
+  #tab-linhas .c-n, #tab-linhas .c-ow, #tab-linhas .c-nome, #tab-linhas .c-deck { width: auto; min-width: 0; }
+  #tab-decks thead { display: table-header-group; }
+  #tab-decks tbody { display: table-row-group; }
+  table#tab-decks { display: table; }
+  #tab-decks th:nth-child(2), #tab-decks td:nth-child(2) { display: none; }
+  #tab-decks .acoes-linha { display: flex; flex-direction: column; gap: 6px; align-items: stretch; }
+  #tab-decks .icones { display: flex; margin: 0 0 4px; }
+  .grade-campos { grid-template-columns: 1fr; }
+}

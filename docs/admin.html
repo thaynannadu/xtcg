@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="noindex">
+  <title>Admin · Líder de Ginásio · XTCG</title>
+  <meta name="theme-color" content="#070707">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=1">
+</head>
+<body>
+  <header class="hero hero-admin">
+    <div class="hero-texto">
+      <img class="hero-logo" src="assets/logo.png" alt="XTCG Card Shop">
+      <h1>Administração</h1>
+      <p class="sub">Cadastre semanais e gerencie decks. Tudo é publicado direto no repositório.</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="painel">
+      <nav class="nav" aria-label="Páginas">
+        <a href="index.html">Classificação</a>
+        <a href="semanais.html">Semanais</a>
+        <a href="admin.html" aria-current="page">Admin</a>
+      </nav>
+      <div class="barra" id="status-conexao" hidden>
+        <span class="conectado" id="texto-conexao"></span>
+        <button id="sair" class="btn btn-sec" type="button">Sair</button>
+      </div>
+    </div>
+
+    <div id="msg" class="aviso-admin" role="status" aria-live="polite" hidden></div>
+
+    <!-- Conexão -->
+    <section id="conexao" class="admin-card">
+      <h2>Conectar ao GitHub</h2>
+      <p class="dica">O site é estático, então o admin grava os arquivos de <code>docs/data</code> pela API do GitHub. Use um <strong>token com acesso só a este repositório</strong> (Settings → Developer settings → Fine-grained tokens → permissão <em>Contents: Read and write</em>). O token fica apenas neste navegador.</p>
+      <form id="form-conexao" class="grade-campos">
+        <label class="campo">Usuário ou organização<input id="c-owner" required autocomplete="off" placeholder="meu-usuario"></label>
+        <label class="campo">Repositório<input id="c-repo" required autocomplete="off" placeholder="xtcg"></label>
+        <label class="campo">Branch<input id="c-branch" required autocomplete="off" value="main"></label>
+        <label class="campo largo">Token<input id="c-token" type="password" required autocomplete="off" placeholder="github_pat_…"></label>
+        <label class="marcar largo"><input id="c-lembrar" type="checkbox"> Lembrar o token neste navegador (se desmarcado, vale só até fechar a aba)</label>
+        <button class="btn btn-grad" type="submit" id="b-conectar">Conectar</button>
+      </form>
+    </section>
+
+    <!-- Painel -->
+    <div id="painel-admin" hidden>
+      <div class="abas" role="tablist">
+        <button role="tab" id="aba-semanal" aria-selected="true" aria-controls="sec-semanal">Semanal</button>
+        <button role="tab" id="aba-decks" aria-selected="false" aria-controls="sec-decks">Decks</button>
+      </div>
+
+      <!-- Semanal -->
+      <section id="sec-semanal" class="admin-card" role="tabpanel">
+        <div class="linha-topo">
+          <label class="campo">Semanal
+            <select id="sel-semanal"></select>
+          </label>
+          <label class="campo">Data<input id="s-data" type="date"></label>
+          <label class="campo cresce">Nome do evento<input id="s-nome" autocomplete="off"></label>
+        </div>
+
+        <details class="colar" id="colar" open>
+          <summary>Colar resultados em texto</summary>
+          <p class="dica">Uma linha por jogador, na ordem de colocação: <code>Nome 3-1-0 62,5%</code> (V-D-E e Opp Win). O Opp Win é opcional.</p>
+          <textarea id="s-texto" rows="6" spellcheck="false" placeholder="1. Matheus Mendes 3-1-0 59,38%&#10;2. Renato Almeida 3-1-0 56,25%"></textarea>
+          <button class="btn btn-sec" type="button" id="b-importar">Importar para a tabela</button>
+        </details>
+
+        <div class="rolagem">
+          <table class="adm" id="tab-linhas">
+            <thead><tr>
+              <th scope="col">#</th><th scope="col" class="esq">Jogador</th><th scope="col">V</th><th scope="col">D</th><th scope="col">E</th>
+              <th scope="col">Opp Win %</th><th scope="col" class="esq">Deck</th><th scope="col">Pts</th><th scope="col"><span class="sr">Ações</span></th>
+            </tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <button class="btn btn-sec" type="button" id="b-add">+ Adicionar jogador</button>
+
+        <div id="problemas" class="problemas" hidden></div>
+        <div id="novos" class="novos" hidden></div>
+
+        <details class="previa" id="previa" open>
+          <summary>Prévia da classificação do mês</summary>
+          <ol id="previa-lista"></ol>
+        </details>
+
+        <div class="acoes">
+          <button class="btn btn-grad" type="button" id="b-publicar">Publicar semanal</button>
+          <button class="btn btn-perigo" type="button" id="b-excluir" hidden>Excluir este semanal</button>
+        </div>
+      </section>
+
+      <!-- Decks -->
+      <section id="sec-decks" class="admin-card" role="tabpanel" hidden>
+        <p class="dica">Os decks cadastrados aqui aparecem com ícone na classificação e nos semanais. Os ícones são os nomes dos arquivos do Limitless (ex.: <code>dragapult</code>, <code>raging-bolt</code>).</p>
+        <div class="rolagem">
+          <table class="adm" id="tab-decks">
+            <thead><tr><th scope="col" class="esq">Deck</th><th scope="col" class="esq">Reconhece por</th><th scope="col"><span class="sr">Ações</span></th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <form id="form-deck" class="grade-campos" autocomplete="off">
+          <h3 class="largo" id="titulo-deck">Novo deck</h3>
+          <label class="campo largo">Nome<input id="d-nome" required placeholder="Dragapult ex / Dusknoir"></label>
+          <label class="campo">Ícones <small>(separe por vírgula)</small><input id="d-icones" placeholder="dragapult, dusknoir"></label>
+          <label class="campo">Palavras que o reconhecem <small>(vazio = usa os ícones)</small><input id="d-palavras" placeholder="dragapult, dusknoir"></label>
+          <label class="campo largo">Apelidos <small>(opcional, separe por vírgula)</small><input id="d-aliases" placeholder="draga dusk"></label>
+          <div class="previa-icones largo" id="d-previa" aria-live="polite"></div>
+          <div class="acoes largo">
+            <button class="btn btn-sec" type="submit" id="b-salvar-deck">Adicionar à lista</button>
+            <button class="btn btn-sec" type="button" id="b-cancelar-deck" hidden>Cancelar edição</button>
+          </div>
+        </form>
+        <div class="acoes">
+          <button class="btn btn-grad" type="button" id="b-publicar-decks" disabled>Publicar alterações nos decks</button>
+        </div>
+      </section>
+    </div>
+
+    <datalist id="lista-jogadores"></datalist>
+    <datalist id="lista-decks"></datalist>
+  </main>
+
+  <script src="util.js?v=1"></script>
+  <script src="calc.js?v=1"></script>
+  <script src="decks.js?v=1"></script>
+  <script src="admin-lib.js?v=1"></script>
+  <script src="github.js?v=1"></script>
+  <script src="admin.js?v=1"></script>
+</body>
+</html>

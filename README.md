@@ -105,3 +105,13 @@ Os nomes dos decks já cadastrados foram tirados dos ícones da página de torne
 ## Se a página abrir sem estilo
 
 Confira, na mesma pasta do `index.html`, se existe um arquivo chamado exatamente `style.css`. Ao baixar o mesmo arquivo mais de uma vez, o navegador renomeia para `style (1).css`, e a página deixa de achar o estilo. Quando isso acontece, a própria página mostra um aviso amarelo no topo. Depois de subir os arquivos, abra com Ctrl+F5 para não pegar a versão antiga do cache.
+
+
+## Administração (`admin.html`)
+Página para cadastrar semanais e gerenciar decks sem editar JSON. Ela grava direto no repositório pela API do GitHub, em **um único commit** por ação (`eventos.json`, `decks.txt`, `jogadores.json`, `decks.json`).
+
+- Conexão: usuário/repositório/branch + token *fine-grained* só deste repositório com **Contents: Read and write**. O token fica no navegador (sessão; ou localmente se marcar "Lembrar").
+- Semanal: cole os resultados (`Nome 3-1-0 62,5%`) ou preencha a tabela, escolha os decks (com ícone) e veja a prévia da classificação antes de publicar. Dá para editar e excluir semanais antigos.
+- Decks: adicionar, editar e excluir decks do `decks.json`, com prévia dos ícones.
+- Segurança: sem o token ninguém consegue gravar; o GitHub Pages republica em ~1 minuto após o commit.
+- Código: `admin-lib.js` (funções puras, testadas em `tests/admin-lib.test.js`), `github.js` (API), `admin.js` (interface).

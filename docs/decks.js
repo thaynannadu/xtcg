@@ -74,7 +74,7 @@
     return { blocos, erros };
   }
 
-  const API = { norm, montarRegistro, identificar, lerTexto };
+  const API = { norm, montarRegistro, identificar, lerTexto, dataDe };
   if (typeof module !== 'undefined' && module.exports) module.exports = API;
   else root.Decks = API;
 })(typeof window !== 'undefined' ? window : globalThis);
