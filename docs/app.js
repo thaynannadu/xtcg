@@ -1,6 +1,8 @@
 (function () {
   const $ = (id) => document.getElementById(id);
   let eventos = [], jogadores = [], logo = null, arte = null, mesSel = '';
+  let cfgDecks = { iconesBase: '', iconesExt: '.png' }, ultimoDeck = new Map();
+  const MOSTRAR_AVISOS = new URLSearchParams(location.search).has('avisos');
 
   const nomeMes = (ym) => {
     const [a, m] = ym.split('-').map(Number);
@@ -8,6 +10,7 @@
     return n.charAt(0).toUpperCase() + n.slice(1);
   };
   const dataCurta = (iso) => iso.slice(8, 10) + '.' + iso.slice(5, 7);
+  const dataBarra = (iso) => iso.slice(8, 10) + '/' + iso.slice(5, 7);
   const plural = (n, um, varios) => `${n} ${n === 1 ? um : varios}`;
 
   async function json(url) {
@@ -33,10 +36,47 @@
     ul.className = 'det';
     l.detalhes.forEach((x) => {
       const li = document.createElement('li');
-      li.textContent = `${dataCurta(x.data)}: ${x.pos}º de ${x.de} = ${x.pontos} pontos`;
+      const d = document.createElement('span'); d.className = 'det-data'; d.textContent = dataBarra(x.data);
+      const seta = document.createElement('span'); seta.className = 'det-seta'; seta.textContent = '→';
+      const pos = document.createElement('span'); pos.className = 'det-pos'; pos.textContent = `${x.pos}º de ${x.de}`;
+      const pts = document.createElement('strong'); pts.className = 'det-pts'; pts.textContent = `${x.pontos} pts`;
+      li.append(d, seta, pos, pts);
       ul.append(li);
     });
     return ul;
+  }
+
+  // Ícones do último deck que o jogador usou (olhando todos os meses), ao lado do nome.
+  function iconesDoDeck(nome) {
+    const u = ultimoDeck.get(XTCG.norm(nome));
+    if (!u || !u.deck) return null;
+    const box = document.createElement('span'); box.className = 'deck-podio';
+    box.title = `Último deck (${dataBarra(u.data)}): ${u.deck.nome}`;
+    u.deck.icones.forEach((slug) => {
+      const img = document.createElement('img');
+      img.src = cfgDecks.iconesBase + slug + (cfgDecks.iconesExt || '.png');
+      img.alt = u.deck.nome; img.loading = 'lazy'; img.decoding = 'async';
+      // Se a imagem não carregar, mostra o nome do Pokémon em texto no lugar.
+      img.addEventListener('error', () => { const t = document.createElement('span'); t.className = 'icone-falha'; t.textContent = slug.replace(/-/g, ' '); img.replaceWith(t); });
+      box.append(img);
+    });
+    return box;
+  }
+
+  async function carregarUltimosDecks() {
+    try {
+      cfgDecks = Object.assign(cfgDecks, await json('data/decks.json'));
+      const r = await fetch('data/decks.txt'); if (!r.ok) return;
+      const registro = Decks.montarRegistro(cfgDecks.decks || []);
+      const { blocos } = Decks.lerTexto(await r.text());
+      const chave = XTCG.criarChave(jogadores);
+      blocos.slice().sort((a, b) => a.data.localeCompare(b.data)).forEach((b) => {
+        b.linhas.forEach((l) => {
+          const deck = Decks.identificar(l.deck, registro);
+          if (deck) ultimoDeck.set(chave(l.jogador), { data: b.data, deck });
+        });
+      });
+    } catch (e) { /* sem decks, o pódio aparece só com o nome */ }
   }
 
   function renderPodio(top) {
@@ -50,18 +90,22 @@
       const b = document.createElement('button');
       b.type = 'button'; b.textContent = l.nome; b.setAttribute('aria-expanded', 'false');
       h.append(b);
+      const dk = iconesDoDeck(l.nome);
       const pts = document.createElement('p'); pts.className = 'pts';
       const forte = document.createElement('strong'); forte.textContent = l.desempenho;
       pts.append(forte, 'pontos de desempenho');
       const part = document.createElement('p'); part.className = 'part';
       part.textContent = plural(l.participacao, 'participação', 'participações');
-      li.append(pos, h, pts, part);
+      li.append(pos, ...(dk ? [dk] : []), h, pts, part);
 
       let det = null;
-      b.addEventListener('click', () => {
+      const alternar = () => {
         if (det) { det.remove(); det = null; b.setAttribute('aria-expanded', 'false'); return; }
         det = listaDetalhes(l); li.append(det); b.setAttribute('aria-expanded', 'true');
-      });
+      };
+      // O cartão inteiro abre os detalhes; o botão continua sendo o alvo de teclado.
+      li.addEventListener('click', (ev) => { if (ev.target.closest('.det') || ev.target === b) return; alternar(); });
+      b.addEventListener('click', alternar);
       ol.append(li);
     });
   }
@@ -83,14 +127,17 @@
       corpo.append(tr);
 
       let det = null;
-      b.addEventListener('click', () => {
+      const alternar = () => {
         if (det) { det.remove(); det = null; b.setAttribute('aria-expanded', 'false'); return; }
         det = document.createElement('tr'); det.className = 'detalhe';
         const td = document.createElement('td'); td.colSpan = 4;
         const ul = listaDetalhes(l); ul.className = '';
         td.append(ul); det.append(td); tr.after(det);
         b.setAttribute('aria-expanded', 'true');
-      });
+      };
+      // A linha inteira abre os detalhes; o botão continua sendo o alvo de teclado.
+      tr.addEventListener('click', (ev) => { if (ev.target === b) return; alternar(); });
+      b.addEventListener('click', alternar);
     });
     $('resto').hidden = resto.length === 0;
   }
@@ -114,6 +161,8 @@
     });
 
     const av = $('avisos'); av.replaceChildren();
+    // Avisos de dados são para quem administra: aparecem só em index.html?avisos
+    if (!MOSTRAR_AVISOS) { av.hidden = true; return; }
     if (r.semCadastro.length) {
       const p = document.createElement('p');
       p.textContent = `Nomes sem cadastro em jogadores.json (contados com o nome impresso): ${r.semCadastro.join(', ')}.`;
@@ -212,7 +261,7 @@
     if (top.length) {
       y += 20;
       const base = y + podioH;
-      const xs = { 1: M + CW + GAP, 2: M, 3: M + 2 * (CW + GAP) };
+      const xs = { 1: M, 2: M + CW + GAP, 3: M + 2 * (CW + GAP) };
       top.forEach((l, i) => desenharCard(g, l, i + 1, xs[i + 1], base, CW));
       y = base;
     }
@@ -260,11 +309,14 @@
       const av = $('avisos'); av.hidden = false; av.textContent = e.message + ' Abra a página por um servidor (veja o README), não direto pelo arquivo.';
       return;
     }
+    await carregarUltimosDecks();
     const hoje = new Date();
     const atual = `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, '0')}`;
     // O mês atual sempre está na lista e começa selecionado, mesmo sem semanal registrado ainda.
     const meses = [...new Set([...eventos.map((e) => e.data.slice(0, 7)), atual])].sort().reverse();
-    mesSel = atual;
+    // Mês atual é o padrão; se ainda não tem semanal, abre o último mês com classificação.
+    const comDados = eventos.map((e) => e.data.slice(0, 7)).filter((m) => m <= atual).sort();
+    mesSel = comDados.includes(atual) || !comDados.length ? atual : comDados[comDados.length - 1];
     const sel = $('mes');
     meses.forEach((m) => {
       const o = document.createElement('option');

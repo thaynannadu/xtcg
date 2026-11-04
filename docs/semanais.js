@@ -99,7 +99,7 @@
     $('subtitulo').textContent = plural(itens.length, 'semanal registrado', 'semanais registrados');
     const vazio = $('vazio');
     vazio.hidden = itens.length > 0;
-    if (!itens.length) vazio.textContent = `Nenhum semanal em ${mes === 'todos' ? 'nenhum mês' : nomeMes(mes)}. Adicione um em docs/data/eventos.json.`;
+    if (!itens.length) vazio.textContent = `Nenhum semanal em ${mes === 'todos' ? 'nenhum mês' : nomeMes(mes)}. Escolha outro mês na lista acima.`;
     $('alternar').disabled = itens.length === 0;
     $('alternar').textContent = tudoAberto ? 'Recolher tudo' : 'Expandir tudo';
   }
@@ -136,7 +136,8 @@
 
     const av = $('avisos'); av.replaceChildren();
     avisos.forEach((t) => av.append(el('p', null, t)));
-    av.hidden = avisos.length === 0;
+    // Avisos de dados são para quem administra: aparecem só em semanais.html?avisos
+    av.hidden = avisos.length === 0 || !new URLSearchParams(location.search).has('avisos');
   }
 
   const dataCurta = (iso) => iso.slice(8, 10) + '.' + iso.slice(5, 7);
