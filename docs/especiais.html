@@ -13,36 +13,44 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=3">
+  <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body data-modo="especiais">
   <header class="hero">
     <div class="hero-texto">
       <img class="hero-logo" src="assets/logo.png" alt="XTCG Card Shop">
-      <h1>Especiais</h1>
-      <p id="subtitulo" class="sub"></p>
     </div>
   </header>
 
-  <main>
-    <div class="painel">
-      <nav class="nav" aria-label="Páginas">
-        <a href="index.html">Classificação</a>
-        <a href="semanais.html">Semanais</a>
-        <a href="especiais.html" aria-current="page">Especiais</a>
-        <a href="admin.html">Admin</a>
-      </nav>
-      <div class="barra">
+  <div class="nav-area">
+    <div class="fixo">
+      <div class="topo">
+        <a class="topo-logo" href="index.html" aria-label="XTCG Card Shop, início"><img src="assets/logo.png" alt="XTCG Card Shop"></a>
         <label class="seletor">
           <span class="sr">Mês</span>
           <select id="mes"></select>
         </label>
-        <label class="seletor">
-          <span class="sr">Tipo</span>
-          <select id="tipo"><option value="todos">Todos os tipos</option></select>
-        </label>
-        <button id="alternar" class="btn btn-grad" type="button">Expandir tudo</button>
       </div>
+      <nav class="secoes" aria-label="Seções">
+        <a href="index.html">Ginásio</a>
+        <a href="especiais.html" aria-current="page">Eventos</a>
+      </nav>
+    </div>
+    <div class="subnav" role="group" aria-label="Tipo de evento">
+      <button class="pilula" type="button" data-tipo="todos" aria-pressed="true">Todos</button>
+      <button class="pilula" type="button" data-tipo="cup" aria-pressed="false">Cups</button>
+      <button class="pilula" type="button" data-tipo="challenge" aria-pressed="false">Challenges</button>
+      <button class="pilula" type="button" data-tipo="especial" aria-pressed="false">Especiais</button>
+    </div>
+  </div>
+
+  <main>
+    <div class="cab-pagina">
+      <div>
+        <h1 id="titulo">Eventos</h1>
+        <p id="subtitulo" class="sub"></p>
+      </div>
+      <button id="alternar" class="btn btn-sec" type="button">Expandir tudo</button>
     </div>
 
     <div id="avisos" class="avisos" hidden></div>
@@ -59,11 +67,12 @@
       <li>Eventos especiais, cups e challenges ficam fora da classificação do Líder de Ginásio: não somam pontos nem participações.</li>
       <li>A página mostra a colocação, V/D/E, Opp Win e o deck de cada jogador, como nos semanais.</li>
     </ul>
+    <p class="rodape-admin"><a href="admin.html">Adicionar novo evento</a></p>
   </footer>
 
-  <script src="util.js?v=3"></script>
-  <script src="calc.js?v=3"></script>
-  <script src="decks.js?v=3"></script>
-  <script src="semanais.js?v=3"></script>
+  <script src="util.js?v=4"></script>
+  <script src="calc.js?v=4"></script>
+  <script src="decks.js?v=4"></script>
+  <script src="semanais.js?v=4"></script>
 </body>
 </html>

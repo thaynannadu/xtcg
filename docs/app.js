@@ -129,8 +129,8 @@
 
   function render() {
     const r = resultado();
-    $('titulo').textContent = `Líder de Ginásio - ${nomeMes(mesSel)}`;
-    $('subtitulo').textContent = `${plural(r.eventos.length, 'semanal contabilizado', 'semanais contabilizados')}`;
+    $('titulo').textContent = 'Líder de Ginásio';
+    $('subtitulo').textContent = `${nomeMes(mesSel)} · ${plural(r.eventos.length, 'semanal contabilizado', 'semanais contabilizados')}`;
     $('mes').value = mesSel;
 
     renderPodio(r.tabela.slice(0, 3));

@@ -13,31 +13,40 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=3">
+  <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
   <header class="hero">
     <div class="hero-texto">
       <img class="hero-logo" src="assets/logo.png" alt="XTCG Card Shop">
-      <h1 id="titulo">Líder de Ginásio</h1>
-      <p id="subtitulo" class="sub"></p>
     </div>
   </header>
 
-  <main>
-    <div class="painel">
-      <nav class="nav" aria-label="Páginas">
-        <a href="index.html" aria-current="page">Classificação</a>
-        <a href="semanais.html">Semanais</a>
-        <a href="especiais.html">Especiais</a>
-        <a href="admin.html">Admin</a>
-      </nav>
-      <div class="barra">
+  <div class="nav-area">
+    <div class="fixo">
+      <div class="topo">
+        <a class="topo-logo" href="index.html" aria-label="XTCG Card Shop, início"><img src="assets/logo.png" alt="XTCG Card Shop"></a>
         <label class="seletor">
           <span class="sr">Mês</span>
           <select id="mes"></select>
         </label>
-        <button id="baixar" class="btn btn-grad" type="button">Baixar imagem</button>
+      </div>
+      <nav class="secoes" aria-label="Seções">
+        <a href="index.html" aria-current="page">Ginásio</a>
+        <a href="especiais.html">Eventos</a>
+      </nav>
+    </div>
+    <div class="subnav" aria-label="Visão do Ginásio">
+      <a class="pilula" href="index.html" aria-current="page">Classificação</a>
+      <a class="pilula" href="semanais.html">Semanais</a>
+    </div>
+  </div>
+
+  <main>
+    <div class="cab-pagina">
+      <div>
+        <h1 id="titulo">Líder de Ginásio</h1>
+        <p id="subtitulo" class="sub"></p>
       </div>
     </div>
 
@@ -74,11 +83,16 @@
       <li>Participações: semanais jogados / total de quintas-feiras do mês.</li>
       <li>Desempate: primeiro, o maior número de participações nas ligas; depois, o melhor posicionamento nos semanais.</li>
     </ul>
+    <p class="rodape-admin"><a href="admin.html">Adicionar novo evento</a></p>
   </footer>
 
-  <script src="util.js?v=3"></script>
-  <script src="calc.js?v=3"></script>
-  <script src="decks.js?v=3"></script>
-  <script src="app.js?v=3"></script>
+  <button id="baixar" class="fab" type="button" aria-label="Baixar imagem" title="Baixar imagem">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="1.5"/><path d="M21 15l-4-4-8 8"/><path d="M15 14v5m0 0l-2-2m2 2l2-2"/></svg>
+  </button>
+
+  <script src="util.js?v=4"></script>
+  <script src="calc.js?v=4"></script>
+  <script src="decks.js?v=4"></script>
+  <script src="app.js?v=4"></script>
 </body>
 </html>
