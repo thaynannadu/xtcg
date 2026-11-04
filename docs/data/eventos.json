@@ -276,5 +276,33 @@
       { "nome": "Ketley Ricardo", "v": 1, "d": 3, "e": 0, "ow": 41.67 },
       { "nome": "Itallo Camisasca", "v": 0, "d": 2, "e": 0, "ow": 75.00 }
     ]
+  },
+  {
+    "data": "2026-11-05",
+    "nome": "Halloween 2026",
+    "tipo": "especial",
+    "jogadores": [
+      { "nome": "Renato Shippuden", "v": 5, "d": 0, "e": 0, "ow": 60.00 },
+      { "nome": "Francisco Pires", "v": 4, "d": 1, "e": 0, "ow": 64.00 },
+      { "nome": "Thiago Oliveira", "v": 4, "d": 1, "e": 0, "ow": 61.00 },
+      { "nome": "Bianca Muriel", "v": 4, "d": 1, "e": 0, "ow": 48.00 },
+      { "nome": "Maria Luísa", "v": 4, "d": 1, "e": 0, "ow": 43.00 },
+      { "nome": "Henrique Cardoso", "v": 3, "d": 2, "e": 0, "ow": 65.00 },
+      { "nome": "Fernando Heleno", "v": 3, "d": 2, "e": 0, "ow": 57.00 },
+      { "nome": "Ketley Ricardo", "v": 3, "d": 2, "e": 0, "ow": 57.00 },
+      { "nome": "Luís Soares", "v": 3, "d": 2, "e": 0, "ow": 50.00 },
+      { "nome": "Igor M", "v": 3, "d": 2, "e": 0, "ow": 45.00 },
+      { "nome": "Rodrigo Mendes", "v": 2, "d": 3, "e": 0, "ow": 61.00 },
+      { "nome": "Italo Melucio", "v": 2, "d": 3, "e": 0, "ow": 54.00 },
+      { "nome": "Luiz Henrique M", "v": 2, "d": 3, "e": 0, "ow": 53.00 },
+      { "nome": "Rafael Ataide", "v": 2, "d": 3, "e": 0, "ow": 51.25 },
+      { "nome": "Victor Juliano", "v": 2, "d": 3, "e": 0, "ow": 46.00 },
+      { "nome": "Luiz Alberto", "v": 2, "d": 3, "e": 0, "ow": 43.00 },
+      { "nome": "João Emanuel M", "v": 2, "d": 3, "e": 0, "ow": 42.50 },
+      { "nome": "Mikael Ruan", "v": 2, "d": 3, "e": 0, "ow": 37.50 },
+      { "nome": "Luana M", "v": 1, "d": 4, "e": 0, "ow": 55.00 },
+      { "nome": "Gabriel Kawamura", "v": 1, "d": 4, "e": 0, "ow": 53.00 },
+      { "nome": "Nicolas Miranda", "v": 1, "d": 4, "e": 0, "ow": 45.00 }
+    ]
   }
 ]
