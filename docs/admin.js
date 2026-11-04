@@ -97,9 +97,10 @@
 
   function montarSeletor(valor) {
     const s = $('sel-semanal'); s.replaceChildren();
-    const novo = el('option', '', '＋ Novo semanal'); novo.value = ''; s.append(novo);
+    const novo = el('option', '', '＋ Novo evento'); novo.value = ''; s.append(novo);
     [...dados.eventos].sort((a, b) => b.data.localeCompare(a.data)).forEach((e) => {
-      const o = el('option', '', `${e.data.slice(8, 10)}/${e.data.slice(5, 7)}/${e.data.slice(0, 4)} · ${e.nome} (${e.jogadores.length})`);
+      const tag = XTCG.ehSemanal(e) ? '' : `[${XTCG.TIPOS[XTCG.tipoDe(e)] || e.tipo}] `;
+      const o = el('option', '', `${e.data.slice(8, 10)}/${e.data.slice(5, 7)}/${e.data.slice(0, 4)} · ${tag}${e.nome} (${e.jogadores.length})`);
       o.value = e.data; s.append(o);
     });
     s.value = valor || '';
@@ -109,11 +110,14 @@
   const vazia = () => ({ nome: '', v: '', d: '', e: '', ow: '', deck: '' });
   const txt = (x) => (x === undefined || x === null ? '' : String(x));
 
+  const rotuloPublicar = () => (editando ? 'Salvar alterações' : $('s-tipo').value === 'semanal' ? 'Publicar semanal' : 'Publicar evento');
+
   function novoSemanal() {
     editando = null;
     const data = A.quintaSugerida(dados.eventos);
-    $('s-data').value = data; $('s-nome').value = A.nomePadrao(data); $('s-nome').dataset.auto = '1';
-    $('s-texto').value = ''; $('colar').open = true; $('b-excluir').hidden = true; $('b-publicar').textContent = 'Publicar semanal';
+    $('s-tipo').value = 'semanal';
+    $('s-data').value = data; $('s-nome').value = A.nomePadrao(data, 'semanal'); $('s-nome').dataset.auto = '1';
+    $('s-texto').value = ''; $('colar').open = true; $('b-excluir').hidden = true; $('b-publicar').textContent = rotuloPublicar();
     linhas = []; renderLinhas(); atualizar();
   }
 
@@ -121,6 +125,7 @@
     const ev = dados.eventos.find((e) => e.data === data);
     if (!ev) return novoSemanal();
     editando = data;
+    $('s-tipo').value = XTCG.tipoDe(ev);
     $('s-data').value = ev.data; $('s-nome').value = ev.nome; delete $('s-nome').dataset.auto;
     const bloco = Decks.lerTexto(dados.decksTxt).blocos.find((b) => b.data === data);
     const chave = XTCG.criarChave(dados.jogadores);
@@ -128,7 +133,7 @@
     linhas = ev.jogadores.map((j) => ({
       nome: j.nome, v: txt(j.v), d: txt(j.d), e: txt(j.e), ow: typeof j.ow === 'number' ? j.ow.toFixed(2) : '', deck: porJogador.get(chave(j.nome)) || '',
     }));
-    $('colar').open = false; $('b-excluir').hidden = false; $('b-publicar').textContent = 'Salvar alterações';
+    $('colar').open = false; $('b-excluir').hidden = false; $('b-publicar').textContent = rotuloPublicar();
     renderLinhas(); atualizar();
   }
 
@@ -184,7 +189,7 @@
 
   function lerForm() {
     return {
-      data: $('s-data').value, nome: $('s-nome').value,
+      data: $('s-data').value, nome: $('s-nome').value, tipo: $('s-tipo').value,
       jogadores: linhas.map((l) => ({ nome: l.nome, v: numero(l.v), d: numero(l.d), e: numero(l.e), ow: numero(l.ow), deck: l.deck })),
     };
   }
@@ -233,10 +238,13 @@
 
   function renderPrevia(sem, r) {
     const ol = $('previa-lista'); ol.replaceChildren();
+    if (sem.tipo !== 'semanal') {
+      ol.append(el('li', 'dica', 'Este evento não conta no Líder de Ginásio: ele aparece só na aba Especiais.')); return;
+    }
     if (!A.dataValida(sem.data) || r.erros.some((e) => /Data inválida|Dê um nome|pelo menos/.test(e))) {
       ol.append(el('li', 'dica', 'Preencha data, nome e pelo menos 2 jogadores para ver a prévia.')); return;
     }
-    const hip = A.aplicarSemanal(sem, { ...dados, eventos: dados.eventos }, { editando }).eventos;
+    const hip = A.aplicarSemanal(sem, { ...dados, eventos: dados.eventos }, { editando }).eventos.filter(XTCG.ehSemanal);
     const mes = sem.data.slice(0, 7);
     const { tabela } = XTCG.calcular(hip.filter((e) => Util.mesDe(e.data) === mes), dados.jogadores);
     const total = Util.totalSemanais(hip, mes);
@@ -264,7 +272,7 @@
       preencherListas(); montarSeletor(sem.data); carregarSemanal(sem.data);
       aviso(`Publicado: ${nomeEv}. O site atualiza em cerca de 1 minuto (o GitHub Pages precisa reconstruir).`, 'ok');
     } catch (err) { aviso(err.message || String(err), 'erro'); }
-    finally { ocupado(b, false); b.textContent = editando ? 'Salvar alterações' : 'Publicar semanal'; atualizar(); }
+    finally { ocupado(b, false); b.textContent = rotuloPublicar(); atualizar(); }
   }
 
   async function excluirSemanal() {
@@ -374,9 +382,17 @@
   $('aba-semanal').addEventListener('click', () => aba('semanal'));
   $('aba-decks').addEventListener('click', () => aba('decks'));
   $('sel-semanal').addEventListener('change', (e) => (e.target.value ? carregarSemanal(e.target.value) : novoSemanal()));
-  $('s-data').addEventListener('input', () => {
+  const nomeAuto = () => {
     const n = $('s-nome');
-    if (n.dataset.auto && A.dataValida($('s-data').value)) n.value = A.nomePadrao($('s-data').value);
+    if (n.dataset.auto && A.dataValida($('s-data').value)) n.value = A.nomePadrao($('s-data').value, $('s-tipo').value);
+  };
+  $('s-data').addEventListener('input', () => { nomeAuto(); atualizar(); });
+  $('s-tipo').addEventListener('change', () => {
+    const n = $('s-nome');
+    if (!editando && !n.value.trim()) n.dataset.auto = '1';
+    nomeAuto();
+    if (!editando && $('s-tipo').value !== 'semanal' && n.dataset.auto) n.placeholder = 'Ex.: Halloween 2026';
+    $('b-publicar').textContent = rotuloPublicar();
     atualizar();
   });
   $('s-nome').addEventListener('input', () => { delete $('s-nome').dataset.auto; atualizar(); });

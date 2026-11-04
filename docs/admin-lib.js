@@ -22,7 +22,7 @@
   function serializarEventos(eventos) {
     const lista = [...eventos].sort((a, b) => a.data.localeCompare(b.data));
     const corpo = lista.map((e) =>
-      `  {\n    "data": ${q(e.data)},\n    "nome": ${q(e.nome)},\n    "jogadores": [\n${e.jogadores.map(linhaJogador).join(',\n')}\n    ]\n  }`);
+      `  {\n    "data": ${q(e.data)},\n    "nome": ${q(e.nome)},\n${e.tipo && e.tipo !== 'semanal' ? `    "tipo": ${q(e.tipo)},\n` : ''}    "jogadores": [\n${e.jogadores.map(linhaJogador).join(',\n')}\n    ]\n  }`);
     return `[\n${corpo.join(',\n')}\n]\n`;
   }
 
@@ -107,7 +107,8 @@
     while (usadas.has(iso(d))) d.setDate(d.getDate() + 7);
     return iso(d);
   }
-  const nomePadrao = (data) => `Torneio semanal ${data.slice(8, 10)}.${data.slice(5, 7)}.${data.slice(2, 4)}`;
+  const nomePadrao = (data, tipo) => (!tipo || tipo === 'semanal' ? `Torneio semanal ${data.slice(8, 10)}.${data.slice(5, 7)}.${data.slice(2, 4)}` : '');
+  const TIPOS_VALIDOS = ['semanal', 'especial', 'cup', 'challenge'];
   const dataValida = (s) => {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(s || '')) return false;
     const d = new Date(`${s}T00:00:00Z`);
@@ -120,8 +121,9 @@
   function validarSemanal(sem, ctx) {
     const erros = [], avisos = [];
     if (!dataValida(sem.data)) erros.push('Data inválida.');
-    else if (ctx.eventos.some((e) => e.data === sem.data && e.data !== ctx.editando)) erros.push(`Já existe um semanal em ${sem.data}. Escolha-o na lista para editar.`);
-    if (!String(sem.nome || '').trim()) erros.push('Dê um nome ao semanal.');
+    else if (ctx.eventos.some((e) => e.data === sem.data && e.data !== ctx.editando)) erros.push(`Já existe um evento em ${sem.data}. Escolha-o na lista para editar (hoje só cabe um evento por dia).`);
+    if (sem.tipo && !TIPOS_VALIDOS.includes(sem.tipo)) erros.push(`Tipo de evento inválido: ${sem.tipo}.`);
+    if (!String(sem.nome || '').trim()) erros.push('Dê um nome ao evento.');
     const lista = sem.jogadores.filter((j) => String(j.nome || '').trim());
     if (lista.length < 2) erros.push('Informe pelo menos 2 jogadores.');
     const chave = XTCG.criarChave(ctx.jogadores);
@@ -147,6 +149,7 @@
     const lista = sem.jogadores.filter((j) => String(j.nome || '').trim());
     const ev = {
       data: sem.data, nome: sem.nome.trim(),
+      ...(sem.tipo && sem.tipo !== 'semanal' ? { tipo: sem.tipo } : {}),
       jogadores: lista.map((j) => {
         const p = { nome: j.nome.trim() };
         for (const k of ['v', 'd', 'e', 'ow']) if (j[k] !== undefined) p[k] = j[k];

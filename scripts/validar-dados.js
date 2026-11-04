@@ -44,6 +44,7 @@ for (const [i, ev] of (Array.isArray(eventos) ? eventos : []).entries()) {
   if (datas.has(ev.data)) erros.push(`Data de evento duplicada: ${ev.data}.`);
   datas.add(ev.data);
   if (typeof ev.nome !== 'string' || !ev.nome.trim()) erros.push(`${ev.data}: nome do evento ausente.`);
+  if (ev.tipo !== undefined && !Object.keys(XTCG.TIPOS).includes(ev.tipo)) erros.push(`${ev.data}: tipo "${ev.tipo}" inválido (use ${Object.keys(XTCG.TIPOS).join(', ')}).`);
   if (!Array.isArray(ev.jogadores)) { erros.push(`${ev.data}: jogadores deve ser uma lista.`); continue; }
   const vistos = new Set();
   ev.jogadores.forEach((item, pos) => {

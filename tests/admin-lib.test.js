@@ -74,3 +74,13 @@ test('removerSemanal tira o evento e o bloco de decks', () => {
   assert.ok(!JSON.parse(r.arquivos['eventos.json']).some((e) => e.data === '2026-10-29'));
   assert.ok(!r.arquivos['decks.txt'].includes('#2026-10-29'));
 });
+
+test('evento especial grava o tipo e semanal continua sem o campo', () => {
+  const sem = { data: '2026-10-31', nome: 'Halloween 2026', tipo: 'especial', jogadores: [{ nome: 'Matheus Mendes', v: 1, d: 0, e: 0, ow: 50 }, { nome: 'Luis Silva', v: 0, d: 1, e: 0, ow: 40 }] };
+  const r = A.aplicarSemanal(sem, dados, {});
+  assert.ok(r.arquivos['eventos.json'].includes('"tipo": "especial"'));
+  assert.strictEqual(JSON.parse(r.arquivos['eventos.json']).find((e) => e.data === '2026-10-31').tipo, 'especial');
+  assert.ok(!A.serializarEventos(eventos).includes('"tipo"'));
+  assert.ok(A.validarSemanal({ ...sem, tipo: 'nada' }, { eventos, jogadores, decksCfg, editando: null }).erros.some((e) => /Tipo/.test(e)));
+  assert.strictEqual(A.nomePadrao('2026-10-31', 'cup'), '');
+});

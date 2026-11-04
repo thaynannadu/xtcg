@@ -31,3 +31,15 @@ test('ordena por desempenho, participações e melhor colocação', () => {
   const r = XTCG.calcular(eventos, []);
   assert.deepEqual(r.tabela.map((x) => x.nome), ['Ana', 'Bia', 'Caio']);
 });
+
+test('cups, challenges e especiais não somam no Líder de Ginásio', () => {
+  const eventos = [
+    { data: '2026-10-29', nome: 'Semanal', jogadores: [{ nome: 'Ana' }, { nome: 'Bia' }] },
+    { data: '2026-10-31', nome: 'Halloween', tipo: 'especial', jogadores: [{ nome: 'Bia' }, { nome: 'Ana' }, { nome: 'Caio' }] },
+    { data: '2026-11-01', nome: 'Cup', tipo: 'cup', jogadores: [{ nome: 'Caio' }, { nome: 'Ana' }] },
+  ];
+  const r = XTCG.calcular(eventos, []);
+  assert.deepStrictEqual(r.tabela.map((x) => [x.nome, x.desempenho, x.participacao]), [['Ana', 2, 1], ['Bia', 1, 1]]);
+  assert.strictEqual(r.eventos.length, 1);
+  assert.ok(XTCG.ehSemanal({ data: 'x' }) && !XTCG.ehSemanal({ tipo: 'challenge' }));
+});

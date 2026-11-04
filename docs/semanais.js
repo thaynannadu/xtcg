@@ -1,7 +1,8 @@
 (function () {
   const $ = (id) => document.getElementById(id);
   const MES_CURTO = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
-  let eventos = [], jogadores = [], linhasDe = new Map(), tudoAberto = false;
+  const MODO = document.body.dataset.modo === 'especiais' ? 'especiais' : 'semanais';
+  let todosEv = [], eventos = [], jogadores = [], linhasDe = new Map(), tudoAberto = false;
   let cfgDecks = { iconesBase: '', iconesExt: '.png' }, registro = [], decksPorData = new Map();
 
   const { nomeMes, plural, dataCurta, json, mesDe } = Util;
@@ -18,7 +19,8 @@
   function eventosDoMes() {
     const mes = $('mes').value;
     return eventos.slice().sort((a, b) => b.data.localeCompare(a.data))
-      .filter((e) => mes === 'todos' || mesDe(e.data) === mes);
+      .filter((e) => mes === 'todos' || mesDe(e.data) === mes)
+      .filter((e) => !$('tipo') || $('tipo').value === 'todos' || XTCG.tipoDe(e) === $('tipo').value);
   }
 
   function cartao(e, aberto) {
@@ -33,7 +35,9 @@
     data.append(el('span', 'dia', String(Number(dd))), el('span', 'mes-curto', MES_CURTO[Number(mm) - 1]));
 
     const info = el('span', 'info');
-    info.append(el('span', 'titulo', e.nome), el('span', 'quantos', plural(linhas.length, 'jogador', 'jogadores')));
+    const titulo = el('span', 'titulo', e.nome);
+    if (MODO === 'especiais') titulo.append(el('span', `tag tag-${XTCG.tipoDe(e)}`, XTCG.TIPOS[XTCG.tipoDe(e)] || XTCG.tipoDe(e)));
+    info.append(titulo, el('span', 'quantos', plural(linhas.length, 'jogador', 'jogadores')));
     const top = el('span', 'top3');
     linhas.slice(0, 3).forEach((l) => {
       const chip = el('span', 'chip');
@@ -77,10 +81,10 @@
     const ul = $('eventos'); ul.replaceChildren();
     itens.forEach((e, i) => ul.append(cartao(e, tudoAberto || i === 0)));
 
-    $('subtitulo').textContent = plural(itens.length, 'semanal registrado', 'semanais registrados');
+    $('subtitulo').textContent = MODO === 'especiais' ? plural(itens.length, 'evento registrado', 'eventos registrados') : plural(itens.length, 'semanal registrado', 'semanais registrados');
     const vazio = $('vazio');
     vazio.hidden = itens.length > 0;
-    if (!itens.length) vazio.textContent = `Nenhum semanal em ${mes === 'todos' ? 'nenhum mês' : nomeMes(mes)}. Escolha outro mês na lista acima.`;
+    if (!itens.length) vazio.textContent = MODO === 'especiais' && !todosEv.some((e) => !XTCG.ehSemanal(e)) ? 'Ainda não há eventos especiais, cups ou challenges registrados.' : `Nenhum ${MODO === 'especiais' ? 'evento' : 'semanal'} em ${mes === 'todos' ? 'nenhum mês' : nomeMes(mes)}. Escolha outro filtro na lista acima.`;
     $('alternar').disabled = itens.length === 0;
     $('alternar').textContent = tudoAberto ? 'Recolher tudo' : 'Expandir tudo';
   }
@@ -100,13 +104,13 @@
     const chave = XTCG.criarChave(jogadores);
     const desconhecidos = new Set();
     blocos.forEach((b) => {
-      const ev = eventos.find((e) => e.data === b.data);
-      if (!ev) { avisos.push(`Em decks.txt há decks para ${b.data}, mas não existe semanal nessa data.`); return; }
+      const ev = todosEv.find((e) => e.data === b.data);
+      if (!ev) { avisos.push(`Em decks.txt há decks para ${b.data}, mas não existe evento nessa data.`); return; }
       const presentes = new Set(linhasDe.get(ev).map((l) => chave(l.impresso)));
       const mapa = decksPorData.get(b.data) || new Map();
       b.linhas.forEach((l) => {
         const k = chave(l.jogador);
-        if (!presentes.has(k)) { avisos.push(`${l.jogador} não aparece no semanal de ${dataCurta(b.data)}.`); return; }
+        if (!presentes.has(k)) { avisos.push(`${l.jogador} não aparece no evento de ${dataCurta(b.data)}.`); return; }
         const deck = Decks.identificar(l.deck, registro);
         if (!deck) desconhecidos.add(l.deck);
         mapa.set(k, { texto: l.deck, deck });
@@ -142,12 +146,13 @@
   async function iniciar() {
     Util.avisarSeSemEstilo();
     try {
-      [eventos, jogadores] = await Promise.all([json('data/eventos.json'), json('data/jogadores.json')]);
+      [todosEv, jogadores] = await Promise.all([json('data/eventos.json'), json('data/jogadores.json')]);
     } catch (e) {
       const v = $('vazio'); v.hidden = false; v.textContent = e.message + ' Abra a página por um servidor (veja o README), não direto pelo arquivo.';
       return;
     }
-    eventos.forEach((e) => linhasDe.set(e, XTCG.detalharEvento(e, jogadores)));
+    todosEv.forEach((e) => linhasDe.set(e, XTCG.detalharEvento(e, jogadores)));
+    eventos = todosEv.filter((e) => (MODO === 'especiais' ? !XTCG.ehSemanal(e) : XTCG.ehSemanal(e)));
     await carregarDecks();
 
     // Só aparecem meses que têm semanal registrado.
@@ -157,6 +162,12 @@
     const todos = el('option', null, 'Todos os meses'); todos.value = 'todos'; sel.append(todos);
     sel.value = meses.length ? Util.mesPadrao(meses, Util.mesAtual()) : 'todos';
 
+    const tipoSel = $('tipo');
+    if (tipoSel) {
+      const presentes = [...new Set(eventos.map(XTCG.tipoDe))];
+      Object.keys(XTCG.TIPOS).filter((t) => presentes.includes(t)).forEach((t) => { const o = el('option', null, XTCG.TIPOS[t]); o.value = t; tipoSel.append(o); });
+      tipoSel.addEventListener('change', render);
+    }
     sel.addEventListener('change', render);
     $('alternar').addEventListener('click', () => {
       tudoAberto = !tudoAberto;

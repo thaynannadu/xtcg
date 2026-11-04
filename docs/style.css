@@ -404,3 +404,9 @@ table.adm .acoes-linha { white-space: nowrap; text-align: right; }
   #tab-decks .icones { display: flex; margin: 0 0 4px; }
   .grade-campos { grid-template-columns: 1fr; }
 }
+
+/* Etiqueta do tipo de evento (página Especiais) */
+.tag { display: inline-block; margin-left: 10px; padding: 2px 10px; border-radius: 999px; font-size: .72rem; font-weight: 800; letter-spacing: .02em; vertical-align: middle; color: var(--branco); }
+.tag-especial { background: var(--g-bronze); }
+.tag-cup { background: var(--g-prata); }
+.tag-challenge { background: var(--g-ouro); color: var(--preto); }

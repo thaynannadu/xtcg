@@ -7,6 +7,11 @@
       .toLowerCase().replace(/\s+/g, ' ').trim();
   }
 
+  // Tipos de evento. Só o "semanal" (padrão, quando não há "tipo") soma no Líder de Ginásio.
+  const TIPOS = { semanal: 'Semanal', especial: 'Especial', cup: 'Cup', challenge: 'Challenge' };
+  const tipoDe = (ev) => (ev && ev.tipo) || 'semanal';
+  const ehSemanal = (ev) => tipoDe(ev) === 'semanal';
+
   // Cada jogador de um semanal pode ser só o nome (texto) ou um objeto { nome, v, d, e, ow }.
   function nomeDe(item) { return typeof item === 'string' ? item : item.nome; }
 
@@ -27,7 +32,7 @@
     const avisos = [];
     let ordem = 0;
 
-    const ordenados = [...eventos].sort((a, b) => a.data.localeCompare(b.data));
+    const ordenados = eventos.filter(ehSemanal).sort((a, b) => a.data.localeCompare(b.data));
     for (const ev of ordenados) {
       const vistos = new Set();
       let duplicado = false;
@@ -100,7 +105,7 @@
     return (nome) => norm((idx.get(norm(nome)) || { nome }).nome);
   }
 
-  const API = { calcular, detalharEvento, criarChave, norm };
+  const API = { calcular, detalharEvento, criarChave, norm, TIPOS, tipoDe, ehSemanal };
   if (typeof module !== 'undefined' && module.exports) module.exports = API;
   else root.XTCG = API;
 })(typeof window !== 'undefined' ? window : globalThis);

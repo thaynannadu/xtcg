@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Especiais · XTCG Card Shop</title>
+  <meta name="theme-color" content="#070707">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=3">
+</head>
+<body data-modo="especiais">
+  <header class="hero">
+    <div class="hero-texto">
+      <img class="hero-logo" src="assets/logo.png" alt="XTCG Card Shop">
+      <h1>Especiais</h1>
+      <p id="subtitulo" class="sub"></p>
+    </div>
+  </header>
+
+  <main>
+    <div class="painel">
+      <nav class="nav" aria-label="Páginas">
+        <a href="index.html">Classificação</a>
+        <a href="semanais.html">Semanais</a>
+        <a href="especiais.html" aria-current="page">Especiais</a>
+        <a href="admin.html">Admin</a>
+      </nav>
+      <div class="barra">
+        <label class="seletor">
+          <span class="sr">Mês</span>
+          <select id="mes"></select>
+        </label>
+        <label class="seletor">
+          <span class="sr">Tipo</span>
+          <select id="tipo"><option value="todos">Todos os tipos</option></select>
+        </label>
+        <button id="alternar" class="btn btn-grad" type="button">Expandir tudo</button>
+      </div>
+    </div>
+
+    <div id="avisos" class="avisos" hidden></div>
+
+    <ul id="eventos" class="eventos"></ul>
+    <p id="vazio" class="vazio" hidden></p>
+
+    <p class="regra">V = vitórias, E = empates, D = derrotas. Opp Win = média de vitórias dos adversários enfrentados (Opponents' Win %), como sai no resultado do torneio.</p>
+  </main>
+
+  <footer class="rodape">
+    <h2>Sobre os eventos especiais</h2>
+    <ul>
+      <li>Eventos especiais, cups e challenges ficam fora da classificação do Líder de Ginásio: não somam pontos nem participações.</li>
+      <li>A página mostra a colocação, V/D/E, Opp Win e o deck de cada jogador, como nos semanais.</li>
+    </ul>
+  </footer>
+
+  <script src="util.js?v=3"></script>
+  <script src="calc.js?v=3"></script>
+  <script src="decks.js?v=3"></script>
+  <script src="semanais.js?v=3"></script>
+</body>
+</html>

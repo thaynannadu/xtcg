@@ -298,6 +298,7 @@
     Util.avisarSeSemEstilo();
     try {
       [eventos, jogadores] = await Promise.all([json('data/eventos.json'), json('data/jogadores.json')]);
+      eventos = eventos.filter(XTCG.ehSemanal);   // cups, challenges e especiais não somam no Líder
     } catch (e) {
       const av = $('avisos'); av.hidden = false; av.textContent = e.message + ' Abra a página por um servidor (veja o README), não direto pelo arquivo.';
       return;

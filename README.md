@@ -115,3 +115,10 @@ Página para cadastrar semanais e gerenciar decks sem editar JSON. Ela grava dir
 - Decks: adicionar, editar e excluir decks do `decks.json`, com prévia dos ícones.
 - Segurança: sem o token ninguém consegue gravar; o GitHub Pages republica em ~1 minuto após o commit.
 - Código: `admin-lib.js` (funções puras, testadas em `tests/admin-lib.test.js`), `github.js` (API), `admin.js` (interface).
+
+## Tipos de evento (semanal, especial, cup, challenge)
+Cada evento em `eventos.json` pode ter `"tipo"`: `semanal` (padrão, quando o campo não existe), `especial`, `cup` ou `challenge`.
+
+- Só `semanal` soma pontos e participações no Líder de Ginásio (`calc.js` ignora os outros tipos; a classificação e o total de quintas do mês também).
+- Os demais aparecem em `especiais.html` (aba **Especiais**), com filtro por mês e por tipo, V/D/E, Opp Win e decks.
+- No admin, escolha o **Tipo** ao cadastrar. Limitação atual: um evento por dia (a data identifica o evento e o bloco de decks em `decks.txt`).
