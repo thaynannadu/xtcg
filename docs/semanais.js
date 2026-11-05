@@ -23,6 +23,14 @@
       .filter((e) => MODO !== 'especiais' || tipoAtual === 'todos' || XTCG.tipoDe(e) === tipoAtual);
   }
 
+  // Iniciais para o chip no mobile: primeira letra do primeiro e do último nome ("Matheus Mendes" → "MM").
+  function iniciais(nome) {
+    const p = String(nome).trim().split(/\s+/).filter(Boolean);
+    if (!p.length) return '';
+    const letra = (s) => s.charAt(0).toUpperCase();
+    return p.length === 1 ? p[0].slice(0, 2).charAt(0).toUpperCase() + p[0].slice(1, 2).toLowerCase() : letra(p[0]) + letra(p[p.length - 1]);
+  }
+
   function cartao(e, aberto) {
     const linhas = linhasDe.get(e);
     const li = el('li');
@@ -40,8 +48,11 @@
     info.append(titulo, el('span', 'quantos', plural(linhas.length, 'jogador', 'jogadores')));
     const top = el('span', 'top3');
     linhas.slice(0, 3).forEach((l) => {
-      const chip = el('span', 'chip');
-      chip.append(el('span', `medalha p${l.pos}`, String(l.pos)), l.nome);
+      const chip = el('span', `chip chip-p${l.pos}`);
+      const nome = el('span', 'chip-nome', l.nome);
+      const ini = el('span', 'chip-ini', iniciais(l.nome)); ini.setAttribute('aria-hidden', 'true');
+      chip.title = l.nome;
+      chip.append(el('span', `medalha p${l.pos}`, String(l.pos)), nome, ini);
       top.append(chip);
     });
     info.append(top);
@@ -132,7 +143,7 @@
     const box = el('span', 'deck');
     if (info.deck) {
       const ic = el('span', 'icones');
-      info.deck.icones.forEach((slug) => ic.append(Util.iconeImg(cfgDecks, slug)));
+      (info.deck.icones.length ? info.deck.icones : ['']).forEach((slug) => ic.append(Util.iconeImg(cfgDecks, slug, info.deck.nome)));
       box.append(ic, el('span', 'deck-nome', info.deck.nome));
       box.title = info.deck.nome;
     } else {

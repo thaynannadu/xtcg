@@ -181,7 +181,7 @@
     const d = Decks.identificar(t, reg);
     if (!d) { l.celDeck.append(el('span', 'nao-reconhecido', 'não reconhecido')); return; }
     const box = el('span', 'icones');
-    d.icones.forEach((s) => box.append(Util.iconeImg(dados.decksCfg, s, d.nome)));
+    (d.icones.length ? d.icones : ['']).forEach((s) => box.append(Util.iconeImg(dados.decksCfg, s, d.nome)));
     l.celDeck.append(box); l.celDeck.title = d.nome;
   }
 
@@ -312,7 +312,7 @@
       const tr = el('tr');
       const nome = el('td', 'esq');
       const box = el('span', 'icones');
-      (d.icones || []).forEach((s) => box.append(Util.iconeImg(dados.decksCfg, s, '')));
+      ((d.icones || []).length ? d.icones : ['']).forEach((s) => box.append(Util.iconeImg(dados.decksCfg, s, d.nome)));
       nome.append(box, el('span', 'nome-deck', d.nome.trim()));
       const pal = el('td', 'esq dica', [...(d.palavras || []), ...(d.aliases || [])].join(', '));
       const ac = el('td', 'acoes-linha');

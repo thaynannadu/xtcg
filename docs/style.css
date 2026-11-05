@@ -28,8 +28,7 @@
 /* Fundo: preto → cinza → preto, na horizontal */
 body {
   margin: 0; min-height: 100vh;
-  background: url("assets/noise.png"), linear-gradient(90deg, var(--preto), var(--cinza-fundo), var(--preto));
-  background-size: 100px, auto;
+  background: linear-gradient(90deg, var(--preto), var(--cinza-fundo), var(--preto));
 }
 button, select { font: inherit; }
 
@@ -250,7 +249,7 @@ td.deck-cel { text-align: left; }
 .icones { display: inline-flex; align-items: center; flex: none; }
 .icones img { width: 32px; height: 32px; object-fit: contain; margin: -2px 0; }
 .icones img + img { margin-left: -6px; }
-.icone-falha { font-size: .7rem; color: var(--texto-suave); padding: 2px 6px; border-radius: 999px; background: var(--chumbo); }
+.icones img.icone-substituta, .deck-podio img.icone-substituta { opacity: .85; }
 .deck-nome { font-size: .85rem; font-weight: 600; color: var(--texto-suave); }
 .deck-livre { font-size: .85rem; padding: 3px 10px; border-radius: 999px; background: var(--chumbo); box-shadow: inset 0 0 0 1px var(--cinza); }
 @media (max-width: 760px) {
@@ -445,4 +444,13 @@ table.adm .acoes-linha { white-space: nowrap; text-align: right; }
   main { padding-top: 0; }
   .nav-area .seletor select { padding: 8px 40px 8px 18px; font-size: .9rem; }
   .nav-area .seletor::after { right: 16px; }
+}
+
+/* Chip do top 3: no mobile só os 2 primeiros, com as iniciais */
+.chip-ini { display: none; }
+@media (max-width: 760px) {
+  .chip-nome { display: none; }
+  .chip-ini { display: inline; letter-spacing: .04em; }
+  .chip.chip-p3 { display: none; }
+  .chip { padding-right: 10px; }
 }

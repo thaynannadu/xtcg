@@ -45,19 +45,22 @@
     document.body.prepend(p);
   }
 
-  // Imagens do deck (Limitless ou cópia local). Se uma não carregar, mostra o nome do Pokémon em texto.
+  // Imagens do deck (Limitless ou cópia local). Deck sem ícone ou ícone que ainda não foi lançado
+  // usa a imagem substituta (substitute.png, na raiz do site), com o nome do Pokémon no tooltip.
+  const SUBSTITUTA = 'substitute.png';
   function iconeImg(cfg, slug, alt) {
     const img = document.createElement('img');
-    img.src = cfg.iconesBase + slug + (cfg.iconesExt || '.png');
-    img.alt = alt || ''; img.loading = 'lazy'; img.decoding = 'async';
+    img.src = slug ? cfg.iconesBase + slug + (cfg.iconesExt || '.png') : SUBSTITUTA;
+    img.alt = alt || (slug ? slug.replace(/-/g, ' ') : ''); img.title = img.alt;
+    img.loading = 'lazy'; img.decoding = 'async';
     img.addEventListener('error', () => {
-      const t = document.createElement('span'); t.className = 'icone-falha'; t.textContent = slug.replace(/-/g, ' ');
-      img.replaceWith(t);
+      if (img.getAttribute('src') === SUBSTITUTA) return;
+      img.classList.add('icone-substituta'); img.src = SUBSTITUTA;
     });
     return img;
   }
 
-  const API = { nomeMes, plural, dataCurta, dataBarra, mesDe, mesAtual, quintasDoMes, totalSemanais, mesesComDados, mesPadrao, json, avisarSeSemEstilo, iconeImg };
+  const API = { nomeMes, plural, dataCurta, dataBarra, mesDe, mesAtual, quintasDoMes, totalSemanais, mesesComDados, mesPadrao, json, avisarSeSemEstilo, iconeImg, SUBSTITUTA };
   if (typeof module !== 'undefined' && module.exports) module.exports = API;
   else root.Util = API;
 })(typeof window !== 'undefined' ? window : globalThis);

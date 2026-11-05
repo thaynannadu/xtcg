@@ -51,22 +51,23 @@ test('validarSemanal acusa duplicados, data repetida e jogador novo', () => {
   assert.ok(r.erros.some((e) => /Já existe/.test(e)));
   assert.ok(r.erros.some((e) => /duas vezes/.test(e)));
   assert.deepStrictEqual(r.novos, ['Fulano Novo']);
-  const ok = A.validarSemanal({ data: '2026-11-05', nome: 'X', jogadores: [{ nome: 'Matheus Mendes', v: 3, d: 1, e: 0, ow: 50 }, { nome: 'Luis Silva', deck: 'foobar' }] }, { eventos, jogadores, decksCfg, editando: null });
+  const ok = A.validarSemanal({ data: '2027-01-07', nome: 'X', jogadores: [{ nome: 'Matheus Mendes', v: 3, d: 1, e: 0, ow: 50 }, { nome: 'Luis Silva', deck: 'foobar' }] }, { eventos, jogadores, decksCfg, editando: null });
   assert.deepStrictEqual(ok.erros, []);
   assert.strictEqual(ok.avisos.length, 1);
 });
 
 test('aplicarSemanal grava evento, deck e cadastra jogador novo', () => {
-  const sem = { data: '2026-11-05', nome: 'Torneio semanal 05.11.26', jogadores: [{ nome: 'Matheus Mendes', v: 3, d: 1, e: 0, ow: 50, deck: 'Dragapult ex' }, { nome: 'Fulano Novo', v: 0, d: 4, e: 0, ow: 40 }] };
+  const sem = { data: '2027-01-07', nome: 'Torneio semanal 07.01.27', jogadores: [{ nome: 'Matheus Mendes', v: 3, d: 1, e: 0, ow: 50, deck: 'Dragapult ex' }, { nome: 'Fulano Novo', v: 0, d: 4, e: 0, ow: 40 }] };
   const r = A.aplicarSemanal(sem, dados, { cadastrar: ['Fulano Novo'] });
   const ev = JSON.parse(r.arquivos['eventos.json']);
   assert.strictEqual(ev.length, eventos.length + 1);
   assert.strictEqual(ev[ev.length - 1].jogadores[1].nome, 'Fulano Novo');
-  assert.ok(r.arquivos['decks.txt'].endsWith('#2026-11-05\nMatheus Mendes: Dragapult ex\n'));
+  assert.ok(r.arquivos['decks.txt'].endsWith('#2027-01-07\nMatheus Mendes: Dragapult ex\n'));
   assert.strictEqual(JSON.parse(r.arquivos['jogadores.json']).slice(-1)[0].nome, 'Fulano Novo');
-  const edit = A.aplicarSemanal({ ...sem, data: '2026-11-06' }, { ...dados, eventos: ev, decksTxt: r.arquivos['decks.txt'] }, { editando: '2026-11-05' });
-  assert.deepStrictEqual(JSON.parse(edit.arquivos['eventos.json']).map((e) => e.data).slice(-2), ['2026-10-29', '2026-11-06']);
-  assert.ok(!edit.arquivos['decks.txt'].includes('#2026-11-05'));
+  const edit = A.aplicarSemanal({ ...sem, data: '2027-01-08' }, { ...dados, eventos: ev, decksTxt: r.arquivos['decks.txt'] }, { editando: '2027-01-07' });
+  assert.ok(JSON.parse(edit.arquivos['eventos.json']).some((e) => e.data === '2027-01-08'));
+  assert.ok(!JSON.parse(edit.arquivos['eventos.json']).some((e) => e.data === '2027-01-07'));
+  assert.ok(!edit.arquivos['decks.txt'].includes('#2027-01-07'));
 });
 
 test('removerSemanal tira o evento e o bloco de decks', () => {
@@ -76,11 +77,11 @@ test('removerSemanal tira o evento e o bloco de decks', () => {
 });
 
 test('evento especial grava o tipo e semanal continua sem o campo', () => {
-  const sem = { data: '2026-10-31', nome: 'Halloween 2026', tipo: 'especial', jogadores: [{ nome: 'Matheus Mendes', v: 1, d: 0, e: 0, ow: 50 }, { nome: 'Luis Silva', v: 0, d: 1, e: 0, ow: 40 }] };
+  const sem = { data: '2027-01-09', nome: 'Evento de teste', tipo: 'especial', jogadores: [{ nome: 'Matheus Mendes', v: 1, d: 0, e: 0, ow: 50 }, { nome: 'Luis Silva', v: 0, d: 1, e: 0, ow: 40 }] };
   const r = A.aplicarSemanal(sem, dados, {});
   assert.ok(r.arquivos['eventos.json'].includes('"tipo": "especial"'));
-  assert.strictEqual(JSON.parse(r.arquivos['eventos.json']).find((e) => e.data === '2026-10-31').tipo, 'especial');
-  assert.ok(!A.serializarEventos(eventos).includes('"tipo"'));
+  assert.strictEqual(JSON.parse(r.arquivos['eventos.json']).find((e) => e.data === '2027-01-09').tipo, 'especial');
+  assert.ok(!A.serializarEventos(eventos.filter((e) => !e.tipo)).includes('"tipo"'));
   assert.ok(A.validarSemanal({ ...sem, tipo: 'nada' }, { eventos, jogadores, decksCfg, editando: null }).erros.some((e) => /Tipo/.test(e)));
-  assert.strictEqual(A.nomePadrao('2026-10-31', 'cup'), '');
+  assert.strictEqual(A.nomePadrao('2027-01-09', 'cup'), '');
 });

@@ -42,7 +42,7 @@
     if (!u || !u.deck) return null;
     const box = document.createElement('span'); box.className = 'deck-podio';
     box.title = `Último deck (${dataBarra(u.data)}): ${u.deck.nome}`;
-    u.deck.icones.forEach((slug) => box.append(Util.iconeImg(cfgDecks, slug, u.deck.nome)));
+    (u.deck.icones.length ? u.deck.icones : ['']).forEach((slug) => box.append(Util.iconeImg(cfgDecks, slug, u.deck.nome)));
     return box;
   }
 
