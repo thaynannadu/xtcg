@@ -342,5 +342,32 @@
       { "nome": "Gabriel Kawamura", "v": 1, "d": 4, "e": 0, "ow": 53.00 },
       { "nome": "Nicolas Miranda", "v": 1, "d": 4, "e": 0, "ow": 45.00 }
     ]
+  },
+  {
+    "data": "2026-11-05",
+    "nome": "Torneio semanal 05.11.26",
+    "jogadores": [
+      { "nome": "Luiz Gustavo Moreira", "v": 5, "d": 0, "e": 0, "ow": 57.00 },
+      { "nome": "Renato Shippuden", "v": 4, "d": 1, "e": 0, "ow": 65.00 },
+      { "nome": "Bruno Silveira", "v": 4, "d": 1, "e": 0, "ow": 50.00 },
+      { "nome": "Thaynan Nadu", "v": 4, "d": 1, "e": 0, "ow": 49.00 },
+      { "nome": "Mário André", "v": 3, "d": 2, "e": 0, "ow": 65.00 },
+      { "nome": "Victor Silva", "v": 3, "d": 2, "e": 0, "ow": 61.00 },
+      { "nome": "Alexander Oliveira", "v": 3, "d": 2, "e": 0, "ow": 57.00 },
+      { "nome": "Vinicius Fernandes", "v": 3, "d": 2, "e": 0, "ow": 54.00 },
+      { "nome": "Matheus Mendes", "v": 3, "d": 2, "e": 0, "ow": 51.00 },
+      { "nome": "Gabriel Kawamura", "v": 3, "d": 2, "e": 0, "ow": 49.00 },
+      { "nome": "Ketley Ricardo", "v": 3, "d": 2, "e": 0, "ow": 47.00 },
+      { "nome": "Antônio Pereira", "v": 2, "d": 3, "e": 0, "ow": 61.25 },
+      { "nome": "Italo Melucio", "v": 2, "d": 3, "e": 0, "ow": 60.00 },
+      { "nome": "Luís Soares", "v": 2, "d": 3, "e": 0, "ow": 49.00 },
+      { "nome": "Nickson Flores", "v": 2, "d": 3, "e": 0, "ow": 43.75 },
+      { "nome": "João Emanuel M", "v": 2, "d": 3, "e": 0, "ow": 43.00 },
+      { "nome": "Antônio Lucas", "v": 2, "d": 3, "e": 0, "ow": 42.00 },
+      { "nome": "Bianca Muriel", "v": 1, "d": 3, "e": 1, "ow": 42.00 },
+      { "nome": "Thiago Oliveira", "v": 1, "d": 3, "e": 1, "ow": 38.75 },
+      { "nome": "Lara Rabelo", "v": 1, "d": 4, "e": 0, "ow": 57.00 },
+      { "nome": "Rafael Ataide", "v": 1, "d": 4, "e": 0, "ow": 42.50 }
+    ]
   }
 ]
