@@ -31,17 +31,17 @@ Bianca Muriel: lucario
 Maria Luísa: lucario
 
 #2026-11-05
-Luiz Gustavo Moreira: dhelmise
+Luiz Gustavo Moreira: dhelmise / banette
 Renato Shippuden: Dragapult
 Bruno Silveira: Dragapult
-Thaynan Nadu: alakazam
-Mário André: Alakazam
-Victor Silva: Archaludon
+Thaynan Nadu: alakazam / dusknoir
+Mário André: alakazam / dudunsparce
+Victor Silva: archaludon
 Alexander Oliveira: Dragapult
 Vinicius Fernandes: Lucario
 Matheus Mendes: Dragapult
 Gabriel Kawamura: Dragapult
-Ketley Ricardo: grimm / froslass
+Ketley Ricardo: grimmsnarl froslass
 Antônio Pereira: Lucario
 Italo Melucio: Mega gardevoir
 Luís Soares: Dragapult
@@ -49,6 +49,6 @@ Nickson Flores: Zoroark
 João Emanuel M: Lucario
 Antônio Lucas: Beedrill
 Bianca Muriel: Lucario
-Thiago Oliveira: Corvo
+Thiago Oliveira: honchkrow porygon2
 Lara Rabelo: Typhlosion
 Rafael Ataide: Metagross
