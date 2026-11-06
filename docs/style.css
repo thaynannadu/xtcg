@@ -14,6 +14,9 @@
   --roxo-escuro: #390b38;
   --texto-suave: #b9b9b9;
 
+  --medalha-ouro: linear-gradient(135deg, #F2D06B, #C99A2E);
+  --medalha-prata: linear-gradient(135deg, #E9ECF0, #A3ABB6);
+  --medalha-bronze: linear-gradient(135deg, #DE9A66, #A8622D);
   --g-ouro: linear-gradient(135deg, var(--amarelo), var(--coral));
   --g-prata: linear-gradient(135deg, var(--azul), var(--roxo));
   --g-bronze: linear-gradient(135deg, var(--coral), var(--roxo));
@@ -38,7 +41,7 @@ button, select { font: inherit; }
   isolation: isolate;
   overflow: hidden;
   width: 100%;
-  min-height: 220px;
+  min-height: 300px;
   margin: 0;
   display: flex;
   align-items: flex-end;
@@ -50,7 +53,7 @@ button, select { font: inherit; }
   inset: 0 0 0 auto;
   width: 60%;
   z-index: -1;
-  background: url("assets/banner-tcg.jpg") right center / cover;
+  background: var(--hero-arte, url("assets/banner-tcg.jpg")) right 15% / cover;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 62%);
   mask-image: linear-gradient(90deg, transparent, #000 62%);
 }
@@ -103,22 +106,27 @@ main { width: min(1080px, 100% - 32px); margin: 0 auto; padding: 8px 0 104px; }
 .card {
   position: relative; cursor: pointer;
   display: grid; grid-template-columns: 1fr auto; grid-template-rows: 1fr minmax(2.5rem, auto) auto auto auto;
-  grid-template-areas: ". ." "pos deck" "nome nome" "pts part" "det det";
+  grid-template-areas: ". av" "pos av" "nome nome" "pts part" "det det";
   column-gap: 16px; align-items: end;
   padding: 18px 22px 20px;
   border: 3px solid transparent; border-radius: 12px;
   background: linear-gradient(var(--preto), var(--preto)) padding-box, var(--grad) border-box;
 }
-.card.p1 { --grad: var(--g-ouro); box-shadow: 0 0 48px rgba(239, 212, 86, .16); }
-.card.p2 { --grad: var(--g-prata); }
-.card.p3 { --grad: var(--g-bronze); }
+.card.p1 { --grad: var(--medalha-ouro); box-shadow: 0 0 48px rgba(242, 208, 107, .16); }
+.card.p2 { --grad: var(--medalha-prata); }
+.card.p3 { --grad: var(--medalha-bronze); }
+.avatar-podio { grid-area: av; justify-self: end; align-self: end; width: 96px; height: 96px; margin: 0 -4px 0 0; image-rendering: pixelated; object-fit: contain; }
+.avatar-mini { display: block; width: 40px; height: 40px; margin: -8px auto; image-rendering: pixelated; object-fit: contain; }
+/* Sem a linha de 1px entre o avatar e o nome: a célula do avatar cobre o vão com a cor da linha. */
+tr.linha td.c-av { box-shadow: 1px 0 0 var(--preto); }
+tr.linha.alt td.c-av { box-shadow: 1px 0 0 var(--chumbo); }
+th.c-av, td.c-av { width: 56px; padding-left: 0; padding-right: 0; text-align: center; }
+.creditos { margin: 12px 0 0; font-size: .8rem; color: var(--texto-suave, #b9b9b9); }
+.creditos a { color: inherit; text-decoration: underline; }
 .card .pos {
   grid-area: pos; font-size: 2.8rem; font-weight: 800; line-height: 1;
   background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent;
 }
-.deck-podio { grid-area: deck; justify-self: end; display: inline-flex; align-items: center; justify-content: flex-end; max-width: 100%; }
-.deck-podio img { width: 40px; height: 40px; object-fit: contain; margin: -2px 0; }
-.deck-podio img + img { margin-left: -6px; }
 .card h3 { grid-area: nome; margin: 14px 0 6px; font-size: 1.5rem; font-weight: 800; line-height: 1.15; letter-spacing: -.01em; text-align: left; }
 .card h3 button { all: unset; cursor: pointer; border-radius: 8px; }
 .card h3 button:focus-visible { outline: 3px solid var(--amarelo); outline-offset: 3px; }
@@ -166,13 +174,13 @@ code { background: var(--preto); padding: 2px 6px; border-radius: 6px; }
   .podio { grid-template-columns: 1fr; align-items: stretch; gap: 10px; }
   .card {
     min-height: 0; padding: 14px 18px 16px; column-gap: 12px; row-gap: 6px;
-    grid-template-columns: auto minmax(0, 1fr) auto; grid-template-rows: auto auto auto;
-    grid-template-areas: "pos nome deck" "pts pts part" "det det det"; align-items: center;
+    grid-template-columns: auto minmax(0, 1fr) auto auto; grid-template-rows: auto auto auto;
+    grid-template-areas: "pos nome nome av" "pts pts part av" "det det det det"; align-items: center;
   }
+  .avatar-podio { grid-area: av; justify-self: end; align-self: center; width: 64px; height: 64px; margin: 0 -4px 0 0; }
   .card .pos { font-size: 2rem; }
-  .card h3 { margin: 0; font-size: 1.5rem; min-width: 0; overflow: hidden; }
+  .card h3 { margin: 0; font-size: 1.3rem; min-width: 0; overflow: hidden; }
   .card h3 button { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .deck-podio img { width: 36px; height: 36px; }
   .card .pts { align-self: end; }
   .card .pts strong { font-size: 2.2rem; }
   .card .part { align-self: end; }
@@ -182,6 +190,8 @@ code { background: var(--preto); padding: 2px 6px; border-radius: 6px; }
   td { padding: 9px 6px; }
   td.nome button { padding: 9px 8px; }
   td.des { font-size: 1.1rem; }
+  th.c-av, td.c-av { width: 40px; }
+  .avatar-mini { width: 34px; height: 34px; }
 }
 @media (prefers-reduced-motion: no-preference) {
   .btn { transition: filter .15s, background .15s; }
@@ -219,9 +229,9 @@ details.evento[open] .data { background: var(--grafite); }
   display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%;
   font-size: .72rem; font-weight: 800; color: var(--preto);
 }
-.medalha.p1 { background: var(--g-ouro); }
-.medalha.p2 { background: var(--g-prata); color: var(--branco); }
-.medalha.p3 { background: var(--g-bronze); color: var(--branco); }
+.medalha.p1 { background: var(--medalha-ouro); }
+.medalha.p2 { background: var(--medalha-prata); }
+.medalha.p3 { background: var(--medalha-bronze); }
 .seta { width: 10px; height: 10px; margin-right: 6px; border-right: 2px solid var(--branco); border-bottom: 2px solid var(--branco); transform: rotate(45deg); transition: transform .15s; }
 details.evento[open] .seta { transform: rotate(225deg); }
 .corpo { padding: 0 18px 16px; }
@@ -231,9 +241,9 @@ td.nome-simples { text-align: left; font-weight: 700; }
 table.mini td.num { font-variant-numeric: tabular-nums; }
 table.mini th { white-space: nowrap; }
 td.pos-medalha { font-weight: 800; }
-tr.linha td.pos-medalha.p1 { color: var(--amarelo); }
-tr.linha td.pos-medalha.p2 { color: #8fb7da; }
-tr.linha td.pos-medalha.p3 { color: #f08d7f; }
+tr.linha td.pos-medalha.p1 { color: #E8BE4A; }
+tr.linha td.pos-medalha.p2 { color: #C3C9D1; }
+tr.linha td.pos-medalha.p3 { color: #D08B55; }
 
 @media (max-width: 760px) {
   details.evento summary { grid-template-columns: auto 1fr; }
@@ -249,7 +259,7 @@ td.deck-cel { text-align: left; }
 .icones { display: inline-flex; align-items: center; flex: none; }
 .icones img { width: 32px; height: 32px; object-fit: contain; margin: -2px 0; }
 .icones img + img { margin-left: -6px; }
-.icones img.icone-substituta, .deck-podio img.icone-substituta { opacity: .85; }
+.icones img.icone-substituta { opacity: .85; }
 .deck-nome { font-size: .85rem; font-weight: 600; color: var(--texto-suave); }
 .deck-livre { font-size: .85rem; padding: 3px 10px; border-radius: 999px; background: var(--chumbo); box-shadow: inset 0 0 0 1px var(--cinza); }
 @media (max-width: 760px) {
@@ -429,7 +439,10 @@ table.adm .acoes-linha { white-space: nowrap; text-align: right; }
 .rodape-admin a { color: var(--branco); font-weight: 700; }
 
 @media (max-width: 760px) {
-  .hero { display: none; }
+  .hero { min-height: 150px; }
+  .hero::before { width: 100%; background-position: right 20%; -webkit-mask-image: linear-gradient(90deg, transparent, #000 45%); mask-image: linear-gradient(90deg, transparent, #000 45%); }
+  .hero::after { height: 70%; background: linear-gradient(180deg, transparent, var(--preto)); }
+  .hero-texto { display: none; }
   .nav-area { display: block; width: auto; padding: 0; }
   .fixo { display: block; position: sticky; top: 0; z-index: 20; background: var(--preto); }
   .topo { display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 56px; padding: 0 16px; border-bottom: 3px solid var(--coral); }
@@ -454,3 +467,33 @@ table.adm .acoes-linha { white-space: nowrap; text-align: right; }
   .chip.chip-p3 { display: none; }
   .chip { padding-right: 10px; }
 }
+
+/* Botões de imagem do feed: desktop = tags no sumário do evento; mobile = barra em duas seções dentro do evento. */
+.acoes-feed { display: flex; align-items: center; gap: 8px; }
+.acoes-feed .btn-baixar {
+  display: inline-flex; align-items: center; justify-content: center; gap: 5px; min-height: 24px; padding: 1px 11px 1px 8px; cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, .55); border-radius: 999px; background: transparent;
+  font-family: inherit; font-weight: 300; font-size: .66rem; line-height: 1; letter-spacing: .08em; text-transform: uppercase;
+  color: rgba(255, 255, 255, .8);
+}
+.ico-baixar {
+  width: 12px; height: 12px; flex: none; background: rgba(255, 255, 255, .8);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3.5v12'/%3E%3Cpath d='M6.5 10.5L12 16l5.5-5.5'/%3E%3Cpath d='M5 20.5h14'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3.5v12'/%3E%3Cpath d='M6.5 10.5L12 16l5.5-5.5'/%3E%3Cpath d='M5 20.5h14'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.acoes-feed .btn-baixar:hover { background: rgba(255, 255, 255, .12); color: var(--branco); }
+.acoes-feed .btn-baixar:hover .ico-baixar { background: var(--branco); }
+.acoes-feed .btn-baixar:active { transform: translateY(1px); }
+.acoes-feed .btn-baixar:disabled { opacity: .5; cursor: wait; background: transparent; }
+.acoes-mobile { display: none; }
+.acoes-desktop { align-self: end; }
+details.evento summary { grid-template-columns: auto 1fr auto auto; }
+@media (max-width: 760px) {
+  .acoes-desktop { display: none; }
+  .acoes-mobile { display: flex; gap: 0; margin: 4px 0 12px; border-top: 1px solid rgba(255, 255, 255, .25); border-bottom: 1px solid rgba(255, 255, 255, .25); }
+  .acoes-mobile .btn-baixar { flex: 1 1 0; min-width: 0; min-height: 36px; border: 0; border-radius: 0; white-space: nowrap; }
+  .acoes-mobile .btn-baixar + .btn-baixar { border-left: 1px solid rgba(255, 255, 255, .25); }
+  details.evento summary { grid-template-columns: auto 1fr; }
+}
+.acoes-msg:empty { display: none; }
+.acoes-msg { font-size: .85rem; color: var(--texto-suave, #b9b9b9); }

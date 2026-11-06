@@ -9,6 +9,8 @@
   const pct = (x) => (typeof x === 'number' ? x.toFixed(2).replace('.', ',') + '%' : '—');
   const num = (x) => (typeof x === 'number' ? String(x) : '—');
 
+  const ICONE_IMAGEM = '<span class="ico-baixar" aria-hidden="true"></span>';
+
   function el(tag, classe, texto) {
     const n = document.createElement(tag);
     if (classe) n.className = classe;
@@ -79,7 +81,34 @@
       tb.append(tr);
     });
     tab.append(cab, tb);
-    rol.append(tab); corpo.append(rol);
+    rol.append(tab);
+
+    // Imagens para o feed: top 4 para postar, ou o resultado completo. No desktop ficam no sumário; no mobile, em uma barra dentro do evento.
+    const msg = el('span', 'acoes-msg'); msg.setAttribute('role', 'status');
+    const botoes = [];
+    const criarAcoes = (classe) => {
+      const acoes = el('div', `acoes-feed ${classe}`);
+      [['top4', 'Top 4'], ['completo', 'Imagem Completa']].forEach(([modo, rotulo]) => {
+        const b = el('button', 'btn btn-baixar'); b.type = 'button';
+        b.title = modo === 'top4' ? 'Baixar a imagem do Top 4 (1080×1350) para postar' : 'Baixar a imagem com todos os participantes';
+        b.innerHTML = ICONE_IMAGEM;
+        const txt = el('span', null, rotulo); b.append(txt);
+        botoes.push({ b, txt, modo, rotulo });
+        b.addEventListener('click', async (ev) => {
+          ev.preventDefault(); ev.stopPropagation(); // dentro do sumário, não abre nem fecha o evento
+          botoes.forEach((x) => { x.b.disabled = true; if (x.modo === modo) x.txt.textContent = 'Gerando…'; }); msg.textContent = '';
+          try {
+            const blob = await Feed.gerar({ evento: e, linhas, decks: mapaDecks, chaveDe: chave, cfgDecks, modo, tipo: XTCG.tipoDe(e) });
+            Feed.baixar(blob, `${XTCG.tipoDe(e)}-${e.data}-${modo}.png`);
+          } catch (err) { msg.textContent = err.message; }
+          botoes.forEach((x) => { x.txt.textContent = x.rotulo; x.b.disabled = false; });
+        });
+        acoes.append(b);
+      });
+      return acoes;
+    };
+    sum.insertBefore(criarAcoes('acoes-desktop'), sum.lastChild);
+    corpo.append(criarAcoes('acoes-mobile'), msg, rol);
 
     det.append(sum, corpo);
     li.append(det);

@@ -77,7 +77,11 @@ Segue o design system da XTCG: preto #070707 e branco como cores principais, cor
 - Clicar no nome mostra de onde vieram os pontos (colocação em cada semanal).
 - Os botões de mês trocam a classificação exibida.
 - O top 3 aparece em destaque, no pódio.
-- "Baixar imagem" gera um PNG da classificação do mês selecionado, com banner e top 3.
+- "Baixar imagem" gera um PNG da classificação do mês selecionado no mesmo padrão das imagens do feed (cabeçalho sorteado, todos os jogadores com pontos e participações).
+
+## Avatares do Líder de Ginásio
+
+Cada mês, cada jogador recebe um avatar pixel art sorteado (`docs/avatares.js`). O sorteio depende só do mês e do nome, então não muda ao recarregar, e evita repetir avatar no mesmo mês. Eles aparecem no pódio, na tabela e na imagem exportada. Os 67 sprites ficam em `docs/assets/avatares/` e são trainer sprites do [Pokémon Showdown](https://play.pokemonshowdown.com/sprites/trainers/) (o crédito aparece no rodapé do site). Para trocar ou acrescentar avatares, ponha o PNG na pasta e inclua o nome na lista de `avatares.js`.
 
 ## Decks dos semanais
 
@@ -122,3 +126,9 @@ Cada evento em `eventos.json` pode ter `"tipo"`: `semanal` (padrão, quando o ca
 - Só `semanal` soma pontos e participações no Líder de Ginásio (`calc.js` ignora os outros tipos; a classificação e o total de quintas do mês também).
 - Os demais aparecem em `especiais.html` (aba **Especiais**), com filtro por mês e por tipo, V/D/E, Opp Win e decks.
 - No admin, escolha o **Tipo** ao cadastrar. Limitação atual: um evento por dia (a data identifica o evento e o bloco de decks em `decks.txt`).
+
+## Imagens para o feed (Baixar top4 / Baixar completo)
+
+Em cada evento das páginas Semanais e Eventos há dois botões: **Baixar top4** (1080×1350, pronta para postar) e **Baixar completo** (todos os participantes, mesma largura). O desenho é feito em canvas por `docs/feed.js`, com a ilustração `assets/banner-tcg.jpg`, o logo `assets/logo-pokemon-tcg.png` e a fonte Londrina Solid (Google Fonts).
+
+Ícones de deck: o canvas tenta o Limitless (precisa de CORS), depois a cópia local em `docs/assets/decks/<slug>.png` e, por último, `substitute.png`. Se os ícones do Limitless não saírem na imagem, salve os que faltam em `assets/decks/` com o nome do slug (ex.: `dragapult.png`).
