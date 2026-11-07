@@ -369,5 +369,22 @@
       { "nome": "Lara Rabelo", "v": 1, "d": 4, "e": 0, "ow": 57.00 },
       { "nome": "Rafael Ataide", "v": 1, "d": 4, "e": 0, "ow": 42.50 }
     ]
+  },
+  {
+    "data": "2026-11-12",
+    "nome": "Challenge",
+    "tipo": "challenge",
+    "jogadores": [
+      { "nome": "Bruno Silveira", "v": 3, "d": 0, "e": 1, "ow": 56.25 },
+      { "nome": "Thaynan Nadu", "v": 3, "d": 1, "e": 0, "ow": 62.50 },
+      { "nome": "Renato Shippuden", "v": 2, "d": 1, "e": 1, "ow": 56.25 },
+      { "nome": "Luiz Gustavo Moreira", "v": 2, "d": 1, "e": 1, "ow": 42.71 },
+      { "nome": "Bianca Muriel", "v": 1, "d": 1, "e": 2, "ow": 50.00 },
+      { "nome": "Fernando Heleno", "v": 1, "d": 1, "e": 2, "ow": 45.83 },
+      { "nome": "Rafael Ataide", "v": 1, "d": 2, "e": 1, "ow": 53.12 },
+      { "nome": "Vitor Lacerda", "v": 1, "d": 2, "e": 1, "ow": 52.08 },
+      { "nome": "Gabriel Kawamura", "v": 1, "d": 2, "e": 1, "ow": 50.00 },
+      { "nome": "Luís Soares", "v": 0, "d": 2, "e": 0, "ow": 75.00 }
+    ]
   }
 ]
