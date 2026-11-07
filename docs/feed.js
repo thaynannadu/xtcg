@@ -195,8 +195,8 @@
     g.textAlign = 'left';
   }
 
-  function linhaCompleta(g, j, y, h, i, mapa) {
-    const x = M, w = W - 2 * M, cor = j.pos <= 4 ? corDaPos(j.pos) : null;
+  function linhaCompleta(g, j, y, h, i, mapa, x = M, w = W - 2 * M) {
+    const cor = j.pos <= 4 ? corDaPos(j.pos) : null;
     caixa(g, x, y, w, h, 10); g.fillStyle = i % 2 ? COR.rodape : COR.chumbo; g.fill();
     if (cor) { g.save(); caixa(g, x, y, w, h, 10); g.clip(); g.fillStyle = cor; g.fillRect(x, y, 8, h); g.restore(); }
     const cy = y + h / 2;
@@ -213,6 +213,73 @@
     g.textAlign = 'right'; g.font = fT(700)(26); g.fillStyle = '#FFFFFF';
     g.fillText(`${n(j.v)}-${n(j.d)}-${n(j.e)}`, vdeDir, cy);
     g.fillStyle = COR.suave; g.font = fT(700)(24); g.fillText(pctTxt(j.ow), rightOw, cy);
+    g.textAlign = 'left';
+  }
+
+
+  // Stories 9:16: tela fixa de 1080×1920. Até 15 linhas cabem em uma coluna; acima disso, duas colunas.
+  const H916 = 1920, TOPO = 501 + 56, MAXLIN = 15;
+  function disposicao(n) {
+    const livre = H916 - FOOT - 40 - TOPO;
+    if (n <= MAXLIN) return { cols: 1, porCol: n, passo: Math.max(40, Math.min(84, Math.floor(livre / Math.max(n, 1)))), x: [M], w: W - 2 * M };
+    const porCol = Math.ceil(n / 2), gap = 16, w = (W - 2 * M - gap) / 2;
+    return { cols: 2, porCol, passo: Math.max(40, Math.min(92, Math.floor(livre / porCol))), x: [M, M + w + gap], w };
+  }
+  // Percorre as linhas por coluna (coluna 1 = primeiras posições) e entrega x, y e largura.
+  function desenharGrade(g, lista, lay, desenha) {
+    lista.forEach((it, i) => {
+      const col = Math.floor(i / lay.porCol), r = i % lay.porCol;
+      desenha(it, i, lay.x[col], TOPO + r * lay.passo, lay.w, lay.passo - 8);
+    });
+  }
+  function cabecalhoColunas(g, lay, esq, dirA, dirB) {
+    g.fillStyle = COR.suave; g.font = fT(600)(lay.cols === 1 ? 20 : 17); g.textBaseline = 'middle';
+    lay.x.forEach((x) => {
+      g.textAlign = 'left'; g.fillText(esq, x + 8, 501 + 20);
+      if (lay.cols === 1) {
+        g.textAlign = 'right'; g.fillText(dirA, x + lay.w - 28 - (dirB === 'Opp Win' ? 120 : 150), 501 + 20); g.fillText(dirB, x + lay.w - 28, 501 + 20);
+      } else { g.textAlign = 'right'; g.fillText(dirA + ' · ' + dirB, x + lay.w - 14, 501 + 20); }
+    });
+    g.textAlign = 'left';
+  }
+
+  function linhaCompletaMini(g, j, y, h, i, mapa, x, w) {
+    const cor = j.pos <= 4 ? corDaPos(j.pos) : null;
+    caixa(g, x, y, w, h, 8); g.fillStyle = i % 2 ? COR.rodape : COR.chumbo; g.fill();
+    if (cor) { g.save(); caixa(g, x, y, w, h, 8); g.clip(); g.fillStyle = cor; g.fillRect(x, y, 6, h); g.restore(); }
+    const cy = y + h / 2;
+    g.textBaseline = 'middle'; g.textAlign = 'center'; g.fillStyle = cor || COR.suave; g.font = fL(32);
+    g.fillText(`${j.pos}º`, x + 36, cy + 2);
+    const d = iconesDe(j.info);
+    desenharIcones(g, d ? d.slugs.map((s) => mapa.get(s)) : [], x + 68, cy + 15, 30, 68);
+    g.textAlign = 'left';
+    const nx = x + 142, rightX = x + w - 14, maxNome = rightX - 86 - nx;
+    g.fillStyle = '#FFFFFF'; ajustar(g, j.nome, fT(700), 21, maxNome, 13);
+    g.fillText(j.nome, nx, cy - (d ? 10 : 0));
+    if (d) { g.fillStyle = COR.suave; ajustar(g, d.nome, fT(600), 15, maxNome, 11); g.fillText(d.nome, nx, cy + 12); }
+    g.textAlign = 'right'; g.fillStyle = '#FFFFFF'; g.font = fT(700)(21);
+    g.fillText(`${n(j.v)}-${n(j.d)}-${n(j.e)}`, rightX, cy - 10);
+    g.fillStyle = COR.suave; g.font = fT(700)(16); g.fillText(pctTxt(j.ow), rightX, cy + 12);
+    g.textAlign = 'left';
+  }
+
+  function linhaPontosMini(g, l, y, h, i, total, av, x, w) {
+    const cor = l.pos <= 3 ? corDaPos(l.pos) : null;
+    caixa(g, x, y, w, h, 8); g.fillStyle = i % 2 ? COR.rodape : COR.chumbo; g.fill();
+    if (cor) { g.save(); caixa(g, x, y, w, h, 8); g.clip(); g.fillStyle = cor; g.fillRect(x, y, 6, h); g.restore(); }
+    const cy = y + h / 2, tam = Math.min(44, h - 8);
+    g.textBaseline = 'middle'; g.textAlign = 'center'; g.fillStyle = cor || COR.suave; g.font = fL(32);
+    g.fillText(`${l.pos}º`, x + 36, cy + 2);
+    let nx = x + 70;
+    if (av) { g.save(); g.imageSmoothingEnabled = false; g.drawImage(av, x + 62, cy - tam / 2, tam, tam); g.restore(); nx = x + 62 + tam + 10; }
+    const rightX = x + w - 14;
+    g.textAlign = 'left'; g.fillStyle = '#FFFFFF'; ajustar(g, l.nome, fT(700), 21, rightX - 96 - nx, 13);
+    g.fillText(l.nome, nx, cy);
+    g.textAlign = 'right'; g.font = fL(34); g.fillStyle = '#FFFFFF';
+    const pts = String(l.pontos); g.fillText(pts, rightX - 30 - 0, cy - 9);
+    const wp = g.measureText(pts).width;
+    g.font = fT(600)(14); g.fillStyle = COR.suave; g.fillText('pts', rightX, cy - 7);
+    g.font = fT(700)(16); g.fillText(`${l.participacao}/${total}`, rightX, cy + 15);
     g.textAlign = 'left';
   }
 
@@ -236,7 +303,7 @@
     };
 
     let H;
-    if (o.modo === 'top4') H = 1350; else H = 501 + 56 + jogs.length * 76 + 40 + FOOT;
+    if (o.modo === 'top4') H = 1350; else H = H916;
     const c = document.createElement('canvas'); c.width = W; c.height = H;
     const g = c.getContext('2d');
     g.fillStyle = COR.preto; g.fillRect(0, 0, W, H);
@@ -246,19 +313,18 @@
       let y = 501;
       jogs.forEach((j, i) => { const h = i === 0 ? 176 : 148; cartao(g, j, y, h, mapa); y += h + 20; });
     } else {
-      g.fillStyle = COR.suave; g.font = fT(600)(20); g.textBaseline = 'middle'; g.textAlign = 'left';
-      g.fillText('Posição · Deck · Jogador', M + 8, 501 + 20);
-      g.textAlign = 'right'; g.fillText('V-D-E', W - M - 28 - 120, 501 + 20); g.fillText('Opp Win', W - M - 28, 501 + 20);
-      g.textAlign = 'left';
-      let y = 501 + 56;
-      jogs.forEach((j, i) => { linhaCompleta(g, j, y, 68, i, mapa); y += 76; });
+      const lay = disposicao(jogs.length);
+      cabecalhoColunas(g, lay, lay.cols === 1 ? 'Posição · Deck · Jogador' : 'Pos · Deck · Jogador', 'V-D-E', 'Opp Win');
+      desenharGrade(g, jogs, lay, (j, i, x, y, w, h) => {
+        if (lay.cols === 1) linhaCompleta(g, j, y, h, i, mapa, x, w); else linhaCompletaMini(g, j, y, h, i, mapa, x, w);
+      });
     }
     rodape(g, ctx, H - FOOT);
     return paraBlob(c, cab.src);
   }
 
-  function linhaPontos(g, l, y, h, i, total, av) {
-    const x = M, w = W - 2 * M, cor = l.pos <= 3 ? corDaPos(l.pos) : null;
+  function linhaPontos(g, l, y, h, i, total, av, x = M, w = W - 2 * M) {
+    const cor = l.pos <= 3 ? corDaPos(l.pos) : null;
     caixa(g, x, y, w, h, 10); g.fillStyle = i % 2 ? COR.rodape : COR.chumbo; g.fill();
     if (cor) { g.save(); caixa(g, x, y, w, h, 10); g.clip(); g.fillStyle = cor; g.fillRect(x, y, 8, h); g.restore(); }
     const cy = y + h / 2;
@@ -288,17 +354,16 @@
     await Promise.all([...new Set(o.linhas.map((l) => l.avatar).filter(Boolean))].map(async (s) => {
       try { avatares.set(s, await imagem(`assets/avatares/${s}.png`)); } catch (e) { /* sem avatar: a linha sai só com o nome */ }
     }));
-    const H = 501 + 56 + o.linhas.length * 76 + 40 + FOOT;
+    const H = H916;
     const c = document.createElement('canvas'); c.width = W; c.height = H;
     const g = c.getContext('2d');
     g.fillStyle = COR.preto; g.fillRect(0, 0, W, H);
     cabecalho(g, ctx);
-    g.fillStyle = COR.suave; g.font = fT(600)(20); g.textBaseline = 'middle'; g.textAlign = 'left';
-    g.fillText('Posição · Jogador', M + 8, 501 + 20);
-    g.textAlign = 'right'; g.fillText('Pontos', W - M - 28 - 150, 501 + 20); g.fillText('Participações', W - M - 28, 501 + 20);
-    g.textAlign = 'left';
-    let y = 501 + 56;
-    o.linhas.forEach((l, i) => { linhaPontos(g, l, y, 68, i, o.total, avatares.get(l.avatar)); y += 76; });
+    const lay = disposicao(o.linhas.length);
+    cabecalhoColunas(g, lay, 'Posição · Jogador', 'Pontos', 'Participações');
+    desenharGrade(g, o.linhas, lay, (l, i, x, y, w, h) => {
+      if (lay.cols === 1) linhaPontos(g, l, y, h, i, o.total, avatares.get(l.avatar), x, w); else linhaPontosMini(g, l, y, h, i, o.total, avatares.get(l.avatar), x, w);
+    });
     rodape(g, ctx, H - FOOT);
     return paraBlob(c, cab.src);
   }

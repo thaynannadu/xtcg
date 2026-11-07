@@ -129,6 +129,6 @@ Cada evento em `eventos.json` pode ter `"tipo"`: `semanal` (padrão, quando o ca
 
 ## Imagens para o feed (Baixar top4 / Baixar completo)
 
-Em cada evento das páginas Semanais e Eventos há dois botões: **Baixar top4** (1080×1350, pronta para postar) e **Baixar completo** (todos os participantes, mesma largura). O desenho é feito em canvas por `docs/feed.js`, com a ilustração `assets/banner-tcg.jpg`, o logo `assets/logo-pokemon-tcg.png` e a fonte Londrina Solid (Google Fonts).
+Em cada evento das páginas Semanais e Eventos há dois botões: **Baixar top4** (1080×1350, pronta para postar) e **Baixar completo** (todos os participantes, vertical 1080×1920 em 9:16, para stories; acima de 15 linhas vira duas colunas). O desenho é feito em canvas por `docs/feed.js`, com a ilustração `assets/banner-tcg.jpg`, o logo `assets/logo-pokemon-tcg.png` e a fonte Londrina Solid (Google Fonts).
 
 Ícones de deck: o canvas tenta o Limitless (precisa de CORS), depois a cópia local em `docs/assets/decks/<slug>.png` e, por último, `substitute.png`. Se os ícones do Limitless não saírem na imagem, salve os que faltam em `assets/decks/` com o nome do slug (ex.: `dragapult.png`).
