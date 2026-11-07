@@ -372,7 +372,7 @@
   },
   {
     "data": "2026-11-12",
-    "nome": "Challenge",
+    "nome": "League XTCG",
     "tipo": "challenge",
     "jogadores": [
       { "nome": "Bruno Silveira", "v": 3, "d": 0, "e": 1, "ow": 56.25 },
