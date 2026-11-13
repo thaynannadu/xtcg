@@ -386,5 +386,27 @@
       { "nome": "Gabriel Kawamura", "v": 1, "d": 2, "e": 1, "ow": 50.00 },
       { "nome": "Luís Soares", "v": 0, "d": 2, "e": 0, "ow": 75.00 }
     ]
+  },
+  {
+    "data": "2026-11-19",
+    "nome": "Torneio semanal 19.11.26",
+    "jogadores": [
+      { "nome": "Thiago Oliveira", "v": 4, "d": 0, "e": 0, "ow": 68.75 },
+      { "nome": "Matheus Mendes", "v": 3, "d": 1, "e": 0, "ow": 59.38 },
+      { "nome": "Francisco Pires", "v": 3, "d": 1, "e": 0, "ow": 56.25 },
+      { "nome": "Luís Soares", "v": 3, "d": 1, "e": 0, "ow": 56.25 },
+      { "nome": "Thaynan Nadu", "v": 2, "d": 1, "e": 1, "ow": 53.12 },
+      { "nome": "Antônio Lucas", "v": 2, "d": 1, "e": 1, "ow": 40.62 },
+      { "nome": "Ketley Ricardo", "v": 2, "d": 2, "e": 0, "ow": 59.38 },
+      { "nome": "Rafael Ataide", "v": 2, "d": 2, "e": 0, "ow": 56.25 },
+      { "nome": "Italo Melucio", "v": 2, "d": 2, "e": 0, "ow": 53.12 },
+      { "nome": "Gabriel Kawamura", "v": 2, "d": 2, "e": 0, "ow": 50.00 },
+      { "nome": "Renato Shippuden", "v": 2, "d": 2, "e": 0, "ow": 43.75 },
+      { "nome": "Victor Juliano", "v": 1, "d": 3, "e": 0, "ow": 56.25 },
+      { "nome": "Maria Luísa", "v": 1, "d": 3, "e": 0, "ow": 43.75 },
+      { "nome": "Alexander Oliveira", "v": 1, "d": 3, "e": 0, "ow": 40.62 },
+      { "nome": "Lara Rabelo", "v": 1, "d": 3, "e": 0, "ow": 37.50 },
+      { "nome": "André Luiz", "v": 0, "d": 4, "e": 0, "ow": 50.00 }
+    ]
   }
 ]
