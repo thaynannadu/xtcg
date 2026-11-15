@@ -408,5 +408,29 @@
       { "nome": "Lara Rabelo", "v": 1, "d": 3, "e": 0, "ow": 37.50 },
       { "nome": "André Luiz", "v": 0, "d": 4, "e": 0, "ow": 50.00 }
     ]
+  },
+  {
+    "data": "2026-11-26",
+    "nome": "League XTCG",
+    "tipo": "cup",
+    "jogadores": [
+      { "nome": "Luiz Gustavo Moreira", "v": 5, "d": 1, "e": 1 },
+      { "nome": "Matheus Mendes", "v": 4, "d": 1, "e": 2 },
+      { "nome": "Thaynan Nadu", "v": 4, "d": 1, "e": 1 },
+      { "nome": "Antônio Lucas", "v": 3, "d": 2, "e": 1 },
+      { "nome": "Thiago Oliveira", "v": 3, "d": 1, "e": 1, "ow": 39.00 },
+      { "nome": "Henrique", "v": 3, "d": 2, "e": 0, "ow": 54.00 },
+      { "nome": "Alexander Oliveira", "v": 3, "d": 2, "e": 0, "ow": 46.00 },
+      { "nome": "Renato Almeida", "v": 3, "d": 2, "e": 0, "ow": 46.00 },
+      { "nome": "Victor Silva", "v": 2, "d": 2, "e": 1, "ow": 51.00 },
+      { "nome": "Rafael Ataide", "v": 2, "d": 2, "e": 1, "ow": 48.00 },
+      { "nome": "João Emanuel", "v": 2, "d": 3, "e": 0, "ow": 55.00 },
+      { "nome": "Bianca Muriel", "v": 2, "d": 3, "e": 0, "ow": 44.00 },
+      { "nome": "Luís Soares", "v": 1, "d": 3, "e": 1, "ow": 40.00 },
+      { "nome": "Bruno Silveira", "v": 1, "d": 3, "e": 0, "ow": 66.67 },
+      { "nome": "Ketley Ricardo", "v": 1, "d": 3, "e": 0, "ow": 65.62 },
+      { "nome": "Luiz Alberto", "v": 1, "d": 4, "e": 0, "ow": 50.00 },
+      { "nome": "Rodrigo Mendes", "v": 0, "d": 2, "e": 1, "ow": 41.67 }
+    ]
   }
 ]
