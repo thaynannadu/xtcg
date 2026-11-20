@@ -432,5 +432,21 @@
       { "nome": "Luiz Alberto", "v": 1, "d": 4, "e": 0, "ow": 50.00 },
       { "nome": "Rodrigo Mendes", "v": 0, "d": 2, "e": 1, "ow": 41.67 }
     ]
+  },
+  {
+    "data": "2026-12-03",
+    "nome": "Torneio semanal 03.12.26",
+    "jogadores": [
+      { "nome": "Lucas Vilela", "v": 4, "d": 0, "e": 0, "ow": 50.00 },
+      { "nome": "Lara Rabelo", "v": 3, "d": 1, "e": 0, "ow": 50.00 },
+      { "nome": "Nickson Flores", "v": 3, "d": 1, "e": 0, "ow": 43.75 },
+      { "nome": "Luís Soares", "v": 2, "d": 2, "e": 0, "ow": 62.50 },
+      { "nome": "Henrique Cardoso", "v": 2, "d": 2, "e": 0, "ow": 56.25 },
+      { "nome": "Lucas Gomes", "v": 2, "d": 2, "e": 0, "ow": 56.25 },
+      { "nome": "Francisco Pires", "v": 2, "d": 2, "e": 0, "ow": 50.00 },
+      { "nome": "Kayo Durães", "v": 1, "d": 3, "e": 0, "ow": 56.25 },
+      { "nome": "Italo Melucio", "v": 1, "d": 3, "e": 0, "ow": 43.75 },
+      { "nome": "João Emanuel M", "v": 0, "d": 4, "e": 0, "ow": 56.25 }
+    ]
   }
 ]
