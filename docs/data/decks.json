@@ -47,6 +47,8 @@
     { "nome": "Seismitoad", "icones": ["seismitoad"], "palavras": ["seismitoad", "seismtoad"] },
     { "nome": "Raging Bolt / Kommo-o", "icones": ["raging-bolt", "kommo-o"], "palavras": ["raging", "bolt", "kommo"] },
     { "nome": "Mega Malamar", "icones": ["malamar-mega"], "palavras": ["malamar"] },
-    { "nome": "Arboliva", "icones": ["arboliva"], "palavras": ["arboliva", "Arboliva", "ArbolivaEx"] }
+    { "nome": "Arboliva", "icones": ["arboliva"], "palavras": ["arboliva", "Arboliva", "ArbolivaEx"] },
+    { "nome": "Mega Rayquaza", "icones": ["rayquaza-mega"], "palavras": ["rayquaza"], "aliases": ["mega ray", "ray"] }
+  
   ]
 }
