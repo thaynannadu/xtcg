@@ -43,6 +43,10 @@
     { "nome": "Beedrill", "icones": ["beedrill"], "palavras": ["beedrill"] },
     { "nome": "Mega Gardevoir", "icones": ["gardevoir-mega"], "palavras": ["gardevoir"] },
     { "nome": "Typhlosion", "icones": ["typhlosion"], "palavras": ["typhlosion","tilapson"] },
+    { "nome": "Mega Clefable", "icones": ["clefable-mega"], "palavras": ["clefable"] },
+    { "nome": "Seismitoad", "icones": ["seismitoad"], "palavras": ["seismitoad", "seismtoad"] },
+    { "nome": "Raging Bolt / Kommo-o", "icones": ["raging-bolt", "kommo-o"], "palavras": ["raging", "bolt", "kommo"] },
+    { "nome": "Mega Malamar", "icones": ["malamar-mega"], "palavras": ["malamar"] },
     { "nome": "Arboliva", "icones": ["arboliva"], "palavras": ["arboliva", "Arboliva", "ArbolivaEx"] }
   ]
 }
