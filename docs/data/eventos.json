@@ -448,5 +448,30 @@
       { "nome": "Italo Melucio", "v": 1, "d": 3, "e": 0, "ow": 43.75 },
       { "nome": "João Emanuel M", "v": 0, "d": 4, "e": 0, "ow": 56.25 }
     ]
+  },
+  {
+    "data": "2026-11-26",
+    "nome": "Torneio semanal 26.11.26",
+    "jogadores": [
+      { "nome": "Renato Shippuden", "v": 5, "d": 0, "e": 0, "ow": 55.00 },
+      { "nome": "Matheus Mendes", "v": 4, "d": 1, "e": 0, "ow": 57.00 },
+      { "nome": "Nickson Flores", "v": 4, "d": 1, "e": 0, "ow": 51.00 },
+      { "nome": "Fernando Heleno", "v": 4, "d": 1, "e": 0, "ow": 44.00 },
+      { "nome": "Rafael Ataide", "v": 3, "d": 2, "e": 0, "ow": 75.00 },
+      { "nome": "Victor Juliano", "v": 3, "d": 2, "e": 0, "ow": 68.00 },
+      { "nome": "Rodrigo Mendes", "v": 3, "d": 2, "e": 0, "ow": 56.00 },
+      { "nome": "Antônio Lucas", "v": 3, "d": 2, "e": 0, "ow": 50.00 },
+      { "nome": "Bianca Muriel", "v": 3, "d": 2, "e": 0, "ow": 46.00 },
+      { "nome": "Victor Seixas", "v": 3, "d": 2, "e": 0, "ow": 42.00 },
+      { "nome": "Maria Luísa", "v": 2, "d": 3, "e": 0, "ow": 65.00 },
+      { "nome": "Francisco Pires", "v": 2, "d": 3, "e": 0, "ow": 61.25 },
+      { "nome": "Victor Silva", "v": 2, "d": 3, "e": 0, "ow": 57.00 },
+      { "nome": "Lucas Vilela", "v": 2, "d": 3, "e": 0, "ow": 54.00 },
+      { "nome": "Gabriel Kawamura", "v": 2, "d": 3, "e": 0, "ow": 42.00 },
+      { "nome": "Thiago Oliveira", "v": 2, "d": 3, "e": 0, "ow": 39.00 },
+      { "nome": "Luiz Gustavo Moreira", "v": 1, "d": 4, "e": 0, "ow": 55.00 },
+      { "nome": "Luís Soares", "v": 1, "d": 4, "e": 0, "ow": 51.25 },
+      { "nome": "Italo Melucio", "v": 1, "d": 4, "e": 0, "ow": 38.00 }
+    ]
   }
 ]
